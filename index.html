@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đồng hồ bấm giờ</title>
+
+<!-- Khai báo Icon cho Safari trên iOS / iPadOS -->
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="icon" type="image/png" href="/icon.png">
+
+<!-- Cấu hình chạy toàn màn hình dạng App trên iPhone -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bấm Giờ">
+
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;font-family:-apple-system,"SF Pro Display",Roboto,sans-serif;background:#fff;color:#222}
@@ -93,7 +103,6 @@ const DEF={prep:5,hold:10,rest:3,ex:3,nSets:4,first:5,dec:1,setRest:10,switchRes
 let cfg={...DEF};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('cfg')||'{}'))}catch(e){}
 
-// Tự động tính danh sách số cái cho từng set từ nSets, first và dec
 const getSets=()=>Array.from({length:cfg.nSets},(_,i)=>Math.max(1,cfg.first-cfg.dec*i));
 const save=()=>{try{localStorage.setItem('cfg',JSON.stringify(cfg))}catch(e){}};
 const fmt=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
@@ -106,7 +115,6 @@ const ICONS={
  clock:'<svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M15 8v8h5"/></svg>'
 };
 
-// Đã loại bỏ hàng "Vòng tập", và cập nhật "Nghỉ chuyển bài" thành step: 1
 const ROWS=[
  {k:'prep',cls:'r6',ic:'clock',name:'Chuẩn bị',sub:'Giây trước khi bắt đầu (0 = tắt)',step:1,min:0,fmt:fmt},
  {k:'hold',cls:'r1',ic:'play',name:'Tập luyện',sub:'Giữ mỗi cái (giây)',step:1,min:1,fmt:fmt},
@@ -205,8 +213,7 @@ function enter(i){
  $('rTitle').textContent=TITLE[s.t];$('rPhase').textContent=TITLE[s.t];
  const ex=s.t==='switch'?s.e+1:s.e,st=s.t==='switch'?1:s.t==='setrest'?s.s+1:s.s;
  const S=getSets();
- dots($('rEx'),cfg.ex,ex);dots($('rSet'),S.length,st);
- $('rName').textContent='Bài tập '+ex;
+ dots($('rEx'),cfg.ex,ex);dots($('rSet'),S.length,st);$('rName').textContent='Bài tập '+ex;
  $('rSub').textContent=s.t==='prep'?'Sẵn sàng nào':s.t==='hold'?`Cái ${s.r}/${s.n}`:s.t==='rest'?`Cái tiếp theo: ${s.r+1}/${s.n}`:`Set ${st}: ${S[st-1]} cái`;
  upd();
  cueStart(s);
@@ -214,8 +221,7 @@ function enter(i){
 function upd(){
  const s=steps[idx],r=Math.max(rem,0);
  $('rTime').textContent=fmt(r);
- $('ring').style.strokeDashoffset=578.05*(1-r/s.d);
- $('rLeft').textContent=fmt(totalAll-doneTime-(s.d-r));
+ $('ring').style.strokeDashoffset=578.05*(1-r/s.d);$('rLeft').textContent=fmt(totalAll-doneTime-(s.d-r));
 }
 function tick(now){
  if(!running)return;
@@ -248,8 +254,7 @@ $('rPlay').onclick=()=>{
  running=!running;setIcon();
  if(running){last=performance.now();requestAnimationFrame(tick)}else if('speechSynthesis' in window)speechSynthesis.cancel();
 };
-$('rCancel').onclick=()=>{if('speechSynthesis' in window)speechSynthesis.cancel();close()};
-$('rSkip').onclick=()=>{
+$('rCancel').onclick=()=>{if('speechSynthesis' in window)speechSynthesis.cancel();close()};$('rSkip').onclick=()=>{
  doneTime+=steps[idx].d;
  if(idx+1>=steps.length)finish();else enter(idx+1);
 };
