@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Đồng hồ bấm giờ</title>
 <!-- Khai báo Icon cho Safari trên iOS / iPadOS -->
 <link rel="apple-touch-icon" href="/icon.png">
@@ -12,7 +12,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Bấm Giờ">
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{-webkit-text-size-adjust:100%}
 body{margin:0;font-family:-apple-system,"SF Pro Display",Roboto,sans-serif;background:#fff;color:#222}
 #app{max-width:480px;min-height:100vh;margin:auto;display:flex;flex-direction:column;background:#fff}
 .top{position:relative;height:52vh;min-height:360px;color:#fff;text-align:center;
