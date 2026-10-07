@@ -72,7 +72,7 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 0 0;font-size:24px
 #mb{overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 18px 22px;font-size:15px;line-height:1.5}
 html.lock,html.lock body{overflow:hidden}
 #mb a{color:#f2284f}#mb p{margin:8px 0}#mb ul{padding-left:20px;margin:6px 0}
-.st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 8px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 8px}
 .st div{background:var(--chip);border-radius:12px;padding:8px 2px;text-align:center;font-size:11px;color:var(--mu)}
 .st b{display:block;font-size:19px;color:var(--tx)}
 .nav{display:flex;justify-content:space-between;align-items:center;margin:8px 0;font-weight:600}
@@ -213,7 +213,7 @@ if(e<cfg.ex&&cfg.switchRest>0)st.push({t:'switch',d:cfg.switchRest,e,label:'Chuy
 }
 return st;
 }
-let steps=[],idx=0,rem=0,running=false,started=false,last=0,lastSec=-1,totalAll=0,doneTime=0,halfSaid=false,wl=null;
+let sessStart=0,steps=[],idx=0,rem=0,running=false,started=false,last=0,lastSec=-1,totalAll=0,doneTime=0,halfSaid=false,wl=null;
 const COL={prep:['#a78bfa','#7c3aed'],hold:['#5de3a1','#4ecb8f'],rest:['#ff6b57','#ee1650'],setrest:['#8b8bf5','#5b6cf0'],switch:['#fbbf24','#f97316'],side:['#fbbf24','#f97316']};
 const TITLE={prep:'Chuẩn bị',hold:'Tập luyện',rest:'Nghỉ ngơi',setrest:'Nghỉ giữa set',switch:'Chuyển bài',side:'Đổi bên'};
 const SIDE=['','Bên trái','Bên phải'];
@@ -285,16 +285,17 @@ async function wake(on){try{if(on){wl=await navigator.wakeLock.request('screen')
 function close(){running=false;started=false;wake(false);$('run').style.display='none';showTotal()}
 /* Ghi lịch sử */
 function logSess(ok){
-const n=ok?steps.length:idx,h=steps.slice(0,n).filter(s=>s.t==='hold').length;
-const el=ok?totalAll:doneTime+(steps[idx].d-Math.max(rem,0));
+const n=ok?steps.length:idx,dn=steps.slice(0,n).filter(s=>s.t==='hold'),h=dn.length;
+const cur=steps[idx],el=ok?totalAll:doneTime+(cur.d-Math.max(rem,0));
 if(!h)return;
-put('hist',[...get('hist'),{t:Date.now(),el:Math.round(el),h,hd:cfg.hold,ex:cfg.ex,ns:cfg.nSets,ok:ok?1:0,nm:Array.from({length:cfg.ex},(_,i)=>nameOf(i+1)).join(', ')}]);
+const nl=Array.from({length:cfg.ex},(_,i)=>nameOf(i+1));
+put('hist',[...get('hist'),{t:Date.now(),s0:sessStart,wt:Math.round((Date.now()-sessStart)/1000),el:Math.round(el),h,hd:cfg.hold,ex:cfg.ex,ns:cfg.nSets,ok:ok?1:0,nm:nl.join(', '),nl,ss:getSets(),sw:cfg.swap?1:0,h1:dn.filter(x=>x.sd===1).length,h2:dn.filter(x=>x.sd===2).length,pe:nl.map((_,i)=>dn.filter(x=>x.e===i+1).length),rt:{pr:cfg.prep,rs:cfg.rest,sr:cfg.setRest,sd:cfg.sideRest,sw:cfg.switchRest},sp:ok?null:{e:cur.e,s:cur.s,r:cur.r,sd:cur.sd}}]);
 }
 function finish(){running=false;logSess(true);beep(1000,.15);setTimeout(()=>beep(1000,.15),200);setTimeout(()=>beep(1300,.4),400);say('Hoàn thành buổi tập');close()}
 $('play').onclick=()=>{
 initAudio();
 steps=build();if(!steps.length)return;
-totalAll=steps.reduce((a,s)=>a+s.d,0);doneTime=0;started=true;running=true;
+totalAll=steps.reduce((a,s)=>a+s.d,0);doneTime=0;started=true;running=true;sessStart=Date.now();
 $('run').style.display='flex';last=performance.now();enter(0);setIcon();wake(true);
 requestAnimationFrame(tick);
 };
@@ -354,19 +355,30 @@ const vGuide=()=>`<p><b>Cách dùng app</b></p><ul><li>Bấm + / − để đổ
 function vPre(){
 return allP().map((p,i)=>`<div class="it"><b>${esc(p.n)}</b><small>${p.c.ex} bài × ${p.c.nSets} set · ${p.c.first} cái, giảm ${p.c.dec}/set · giữ ${p.c.hold}s · nghỉ ${p.c.rest}s · ${p.c.swap?'đổi bên':'một bên'}</small><button class="btn p" data-a="pre" data-i="${i}">Dùng</button>${p.b?'':`<button class="btn" data-a="pdel" data-i="${i-PR.length}">Xóa</button>`}</div>`).join('')+`<button class="btn p" data-a="psave">＋ Lưu cấu hình hiện tại</button>`;
 }
+const hhmm=t=>{const d=new Date(t);return p2(d.getHours())+':'+p2(d.getMinutes())};
+const card=x=>{
+const r=x.rt,sp=x.sp,nl=x.nl;
+return `<div class="it"><b>${x.s0?hhmm(x.s0)+'–':''}${hhmm(x.t)}</b> ${x.ok?'✅ Hoàn thành':'⏸ Bỏ dở'}`+
+`<small>${x.h} cái × ${x.hd}s · tập ${fmt(x.el)}</small>`+
+`<small>${x.ex} bài × ${x.ns} set${x.ss?' ('+x.ss.join('·')+' cái)':''}${x.sw===undefined?'':x.sw?' · đổi bên (trái '+x.h1+', phải '+x.h2+')':' · một bên'}</small>`+
+`<small>${nl&&x.pe?nl.map((n,i)=>esc(n)+' '+x.pe[i]).join(' · '):esc(x.nm||'')}</small>`+
+(r?`<small>Nghỉ: cái ${r.rs}s · set ${r.sr}s · đổi bên ${r.sd}s · chuyển bài ${r.sw}s · chuẩn bị ${r.pr}s</small>`:'')+
+(!x.ok&&sp&&sp.e?`<small>Dừng ở: ${nl?esc(nl[sp.e-1]||''):'bài '+sp.e}${sp.s?', set '+sp.s:''}${sp.r?', cái '+sp.r:''}${x.sw&&sp.sd?(sp.sd===1?', bên trái':', bên phải'):''}</small>`:'')+'</div>'};
 function vHist(){
 const h=get('hist'),days={};h.forEach(x=>{const k=dk(x.t);days[k]=(days[k]||0)+x.el});
 let s=0,d=new Date();if(!days[dk(d)])d.setDate(d.getDate()-1);
 while(days[dk(d)]){s++;d.setDate(d.getDate()-1)}
+const keys=Object.keys(days).sort();let lg=0,run=0,pv=null;
+keys.forEach(k=>{const q=k.split('-'),n=Date.UTC(+q[0],+q[1]-1,+q[2])/864e5;run=pv!==null&&n-pv===1?run+1:1;pv=n;lg=Math.max(lg,run)});
 const inM=(x,p)=>dk(x.t).startsWith(p),sum=l=>l.reduce((a,x)=>a+x.el,0);
 const best=h.reduce((a,x)=>Math.max(a,x.h?x.hd:0),0);
-let o=`<div class="st"><div><b>${s}</b>ngày liên tiếp</div><div><b>${Math.round(sum(h.filter(x=>inM(x,dk(Date.now()).slice(0,7))))/60)}</b>phút tháng này</div><div><b>${best}s</b>giữ lâu nhất</div><div><b>${h.length}</b>buổi tập</div></div>`;
+let o=`<div class="st"><div><b>${s}</b>ngày liên tiếp</div><div><b>${Math.max(lg,s)}</b>chuỗi dài nhất</div><div><b>${keys.length}</b>ngày đã tập</div><div><b>${Math.round(sum(h.filter(x=>inM(x,dk(Date.now()).slice(0,7))))/60)}</b>phút tháng này</div><div><b>${best}s</b>giữ lâu nhất</div><div><b>${h.length}</b>buổi tập</div></div>`;
 o+=[['day','Ngày'],['month','Tháng'],['year','Năm']].map(([k,n])=>`<button class="tb${k===hv?' on':''}" data-a="hv" data-v="${k}" style="margin-right:6px">${n}</button>`).join('');
 const nav=t=>`<div class="nav"><button class="btn" data-a="nav" data-n="-1">◀</button>${t}<button class="btn" data-a="nav" data-n="1">▶</button></div>`;
 if(hv==='day'){
 const l=h.filter(x=>dk(x.t)===hdk).sort((a,b)=>a.t-b.t),[y,m,dd]=hdk.split('-');
 o+=nav(`${dd}/${m}/${y}`);
-o+=l.length?l.map(x=>{const t=new Date(x.t);return `<div class="it"><b>${p2(t.getHours())}:${p2(t.getMinutes())}</b> ${x.ok?'✅ Hoàn thành':'⏸ Bỏ dở'}<small>${x.h} cái × ${x.hd}s · ${fmt(x.el)} · ${x.ex} bài × ${x.ns} set</small><small>${esc(x.nm||'')}</small></div>`}).join('')+`<p>Tổng: ${l.length} buổi · ${fmt(sum(l))}</p>`:'<p>Chưa có buổi tập nào trong ngày này.</p>';
+o+=l.length?l.map(card).join('')+`<p>Tổng: ${l.length} buổi · ${fmt(sum(l))}</p>`:'<p>Chưa có buổi tập nào trong ngày này.</p>';
 }else if(hv==='month'){
 const pre=hy+'-'+p2(hm+1),dim=new Date(hy,hm+1,0).getDate(),off=(new Date(hy,hm,1).getDay()+6)%7,td=dk(Date.now());
 let c=['T2','T3','T4','T5','T6','T7','CN'].map(x=>`<i>${x}</i>`).join('')+'<b class="n"></b>'.repeat(off);
