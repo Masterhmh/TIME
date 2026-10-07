@@ -56,17 +56,17 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 60px 0;font-size:2
 [data-theme=dark] .r1{color:#4ade80}[data-theme=dark] .r2{color:#ff7b95}[data-theme=dark] .r3{color:#c4c4c4}
 [data-theme=dark] .r4{color:#9aa5ff}[data-theme=dark] .r5{color:#b9a0ff}[data-theme=dark] .r6{color:#f0cc55}
 #run{display:none;position:fixed;inset:0;z-index:9;flex-direction:column;align-items:center;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 16px) 14px calc(env(safe-area-inset-bottom,0px) + 20px);overflow-y:auto;transition:background .4s}
-#rTitle{font-size:24px;font-weight:700;margin-bottom:clamp(8px,2.4dvh,22px)}
-.pan{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;border:2px solid rgba(255,255,255,.25);border-radius:26px;padding:0 20px;height:78px;height:clamp(52px,8dvh,78px);flex:none;margin-bottom:10px;font-size:20px;font-weight:600}
+#rTitle{font-size:22px;font-weight:700;height:44px;margin:-4px 0 clamp(8px,2dvh,16px);display:flex;align-items:center;justify-content:center;text-align:center;padding:0 52px;white-space:nowrap}
+.pan{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;border:2px solid rgba(255,255,255,.25);border-radius:26px;padding:0 20px;height:56px;height:clamp(48px,7dvh,56px);flex:none;margin-bottom:10px;font-size:20px;font-weight:600}
 .dots{display:flex;gap:12px;align-items:center}.dots i{font-style:normal;font-size:22px;font-weight:600;min-width:20px;text-align:center;color:#fff;opacity:.35;transition:opacity .3s,transform .3s}.dots i.on{opacity:1;font-weight:800;transform:scale(1.2)}
-.ringw{position:relative;flex:none;width:min(80vw,380px);width:clamp(180px,min(80vw,380px,calc(100dvh - 530px)),380px);aspect-ratio:1;margin:auto;container-type:inline-size}
+.ringw{position:relative;flex:none;width:min(80vw,380px);width:clamp(180px,min(80vw,380px,calc(100dvh - 505px)),380px);aspect-ratio:1;margin:auto;container-type:inline-size}
 .ringw svg{width:100%;height:100%;transform:rotate(-90deg)}
 .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #rPhase{font-size:22px;font-weight:600;text-transform:uppercase}
 #rTime{font-size:64px;font-size:clamp(44px,22cqw,84px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
-#rTotal{font-size:24px;font-weight:600;display:flex;align-items:center;gap:8px}
+#rTotal{font-size:24px;font-weight:600;display:flex;align-items:center;gap:8px}#rTotal small{font-size:13px;font-weight:400;opacity:.8}
 #rName{font-size:30px;font-size:clamp(26px,4.6dvh,38px);font-weight:800;text-transform:uppercase;text-align:center;overflow-wrap:anywhere;padding:0 8px}
-#rSub{opacity:.85;margin:6px 0 clamp(10px,2.6dvh,24px);min-height:20px;text-align:center}
+#rSub{opacity:.85;margin:10px 0 clamp(14px,3dvh,28px);min-height:20px;text-align:center}
 .ctl{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:420px}
 .ctl .c{background:none;border:0;color:#fff;font-size:18px;width:70px;cursor:pointer;text-align:left}
 #rPlay{width:104px;height:104px;width:clamp(84px,13dvh,116px);height:clamp(84px,13dvh,116px);border-radius:50%;border:0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -101,6 +101,10 @@ position:relative;animation:dpop .7s cubic-bezier(.2,1.6,.4,1) .15s both}
 #lkHold{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 12px);width:44px;height:44px;border:0;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;padding:0;touch-action:none;font-size:20px}
 #lkHold svg{position:absolute;inset:-4px;width:52px;height:52px}
 #lkHint{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 66px);font-size:12px;text-align:right;opacity:.9;max-width:60vw}
+.fi{width:1.15em;height:1.15em;vertical-align:-.22em;fill:currentColor;flex:none}
+.row .ic .g{fill:var(--bg)}.row .ic .s{fill:none;stroke:var(--bg);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+#menu .fi,#lockBtn .fi,#lkHold>.fi{width:22px;height:22px;vertical-align:middle}
+#lkHold>.fi{position:relative}
 /* Popup / menu */
 .ov{display:none;overscroll-behavior:contain;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}
 .box{background:var(--bg);color:var(--tx);width:100%;max-width:480px;height:84vh;height:84dvh;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 20px);border-radius:28px 28px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 30px rgba(0,0,0,.25);animation:up .24s ease-out}
@@ -136,13 +140,16 @@ html.lock,html.lock body{overflow:hidden}
 .it b{font-size:16px}
 .ill{display:block;width:100%;max-height:130px;margin:6px 0;color:var(--tx)}
 img.ill{max-height:none;height:auto;border-radius:12px}
+#rCancel{position:absolute;left:14px;top:calc(env(safe-area-inset-top,0px) + 12px);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.25);color:#fff;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#rCancel .fi{width:20px;height:20px;vertical-align:middle}
+.ctl{display:flex;justify-content:center;align-items:center;gap:24px}
 </style>
 </head>
 <body>
 <div id="app">
 <div class="top" id="top">
 <h1>Đồng hồ bấm giờ</h1>
-<button id="menu" aria-label="Trình đơn">☰</button>
+<button id="menu" aria-label="Trình đơn"><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg></button>
 <div id="label">Tổng thời gian</div>
 <div id="time">00:00</div>
 <div id="info"></div>
@@ -152,25 +159,26 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <div class="sheet" id="sheet">
 <button id="play" aria-label="Bắt đầu"><svg viewBox="0 0 24 24" id="pi"><path d="M7 4l14 8-14 8z"/></svg></button>
 <div class="tools">
-<button id="voice">🔊 Âm thanh</button><button id="vsel">🗣 Giọng đọc</button><button id="theme">🌓 Giao diện</button><button id="names">✏️ Tên bài<small>Tùy chỉnh</small></button>
+<button id="voice"><span><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4z"/><path d="M15.2 9.2a4 4 0 0 1 0 5.6M17.8 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Âm thanh</span></button><button id="vsel"><span><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.8 11.5a6.2 6.2 0 0 0 12.4 0M12 17.8V21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Giọng đọc</span></button><button id="theme"><span><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0 0 18z"/><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Giao diện</span></button><button id="names"><span><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.3V20h2.7L18 8.7 15.3 6z"/><path d="M19.7 7a1 1 0 0 0 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0L16 5.3 18.7 8z"/></svg> Tên bài</span><small>Tùy chỉnh</small></button>
 </div>
 <div id="sug"></div>
 <div id="rows"></div>
 </div>
 </div>
 <div id="run">
-<button id="lockBtn" aria-label="Khóa màn hình">🔒</button>
+<button id="lockBtn" aria-label="Khóa màn hình"><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.6"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button id="rCancel" aria-label="Hủy buổi tập"><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
 <div id="rTitle">Tập luyện</div>
 <div class="pan">Bài tập<div class="dots" id="rEx"></div></div>
 <div class="pan">Vòng tập<div class="dots" id="rSet"></div></div>
 <div class="ringw">
-<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
+<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="3"/>
 <circle id="ring" cx="100" cy="100" r="92" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="578.05" stroke-dashoffset="0"/></svg>
 <div class="mid"><div id="rPhase"></div><div id="rTime">00:00</div>
-<div id="rTotal"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M15 8v8h5"/></svg><span id="rLeft">00:00</span></div></div>
+<div id="rTotal"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M15 8v8h5"/></svg><span id="rLeft">00:00</span><small>còn lại</small></div></div>
 </div>
 <div id="rName"></div><div id="rSub"></div>
-<div class="ctl"><button class="c" id="rCancel">HỦY</button>
+<div class="ctl">
 <button id="rPrev" aria-label="Quay lại"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M18 5L8 12l10 7z"/><path d="M5 5v14"/></svg></button>
 <button id="rPlay"><svg viewBox="0 0 24 24" id="rpi"><path d="M7 4l14 8-14 8z"/></svg></button>
 <button id="rSkip"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M6 5l10 7-10 7z"/><path d="M19 5v14"/></svg></button></div>
@@ -179,11 +187,11 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <canvas id="cf"></canvas>
 <div class="medal"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 33l12 12 21-24"/></svg></div>
 <h2>HOÀN THÀNH!</h2>
-<p>Tuyệt vời, bạn đã hoàn thành buổi tập 💪</p>
+<p>Tuyệt vời, bạn đã hoàn thành buổi tập</p>
 <div id="dStats"></div>
 <button id="dDone">XONG</button>
 </div>
-<div id="lk"><button id="lkHold" aria-label="Giữ để mở khóa"><svg viewBox="0 0 44 44"><circle id="lkRing" cx="22" cy="22" r="20" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="125.7" stroke-dashoffset="125.7" transform="rotate(-90 22 22)"/></svg>🔒</button><div id="lkHint">Màn hình đang khóa. Giữ nút 🔒 khoảng 1,5 giây để mở.</div></div>
+<div id="lk"><button id="lkHold" aria-label="Giữ để mở khóa"><svg viewBox="0 0 44 44"><circle id="lkRing" cx="22" cy="22" r="20" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="125.7" stroke-dashoffset="125.7" transform="rotate(-90 22 22)"/></svg><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.6"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div id="lkHint">Màn hình đang khóa. Giữ nút khóa ở góc phải khoảng 1,5 giây để mở.</div></div>
 <div class="ov" id="ov"><div class="box">
 <div class="mh"><span id="mtl"></span><button data-a="close" aria-label="Đóng">✕</button></div>
 <div class="tabs" id="mt"></div><div id="mb"></div>
@@ -205,12 +213,17 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const BIG3=['Curl-Up','Side Plank','Bird-Dog'];
 const nameOf=e=>((cfg.names||[])[e-1]||'').trim()||BIG3[e-1]||'Bài tập '+e;
 const ICONS={
-play:'<svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M12 10l8 5-8 5z" fill="currentColor"/></svg>',
-pause:'<svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M12 10v10M18 10v10"/></svg>',
-bolt:'<svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M16 7l-5 9h4l-1 7 5-9h-4z" fill="currentColor"/></svg>',
-loop:'<svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M24 15a9 9 0 1 1-3-6.7M24 5v5h-5"/></svg>',
-clock:'<svg class="ic" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="15" cy="15" r="12"/><path d="M15 8v8h5"/></svg>'
+play:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><path class="g" d="M12.5 9.5v13l10.5-6.5z"/></svg>',
+pause:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><rect class="g" x="10.5" y="9.5" width="4" height="13" rx="1.4"/><rect class="g" x="17.5" y="9.5" width="4" height="13" rx="1.4"/></svg>',
+bolt:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><path class="g" d="M17.8 6.5L10 17.6h5.2L13.8 25.5 22 14.2h-5.3z"/></svg>',
+loop:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><path class="s" d="M22.2 16a6.2 6.2 0 1 1-1.9-4.4"/><path class="s" d="M22.6 8.4v4.6H18"/></svg>',
+clock:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><circle class="s" cx="16" cy="16" r="7.6"/><path class="s" d="M16 11.8V16l3 1.8"/></svg>',
+spk:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><path class="g" d="M9.5 13v6h4l5 4.5v-15L13.5 13z"/><path class="s" d="M21.5 12.5a5 5 0 0 1 0 7"/></svg>',
+target:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><circle class="s" cx="16" cy="16" r="7.4"/><circle class="g" cx="16" cy="16" r="2.6"/></svg>',
+lockr:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><rect class="g" x="9.5" y="14" width="13" height="9.5" rx="2.4"/><path class="s" d="M12.5 14v-2.4a3.5 3.5 0 0 1 7 0V14"/></svg>'
 };
+const FI={"sound": "<path d=\"M4 9.5v5h3.5l4.5 4v-13l-4.5 4z\"/><path d=\"M15.2 9.2a4 4 0 0 1 0 5.6M17.8 6.6a7.6 7.6 0 0 1 0 10.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>", "mic": "<rect x=\"9\" y=\"3\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5.8 11.5a6.2 6.2 0 0 0 12.4 0M12 17.8V21\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>", "theme": "<path d=\"M12 3a9 9 0 0 0 0 18z\"/><circle cx=\"12\" cy=\"12\" r=\"8.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>", "edit": "<path d=\"M4 17.3V20h2.7L18 8.7 15.3 6z\"/><path d=\"M19.7 7a1 1 0 0 0 0-1.4l-1.3-1.3a1 1 0 0 0-1.4 0L16 5.3 18.7 8z\"/>", "lock": "<rect x=\"5\" y=\"10.5\" width=\"14\" height=\"10\" rx=\"2.6\"/><path d=\"M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>", "menu": "<rect x=\"4\" y=\"6\" width=\"16\" height=\"2.4\" rx=\"1.2\"/><rect x=\"4\" y=\"10.8\" width=\"16\" height=\"2.4\" rx=\"1.2\"/><rect x=\"4\" y=\"15.6\" width=\"16\" height=\"2.4\" rx=\"1.2\"/>", "trash": "<path d=\"M8.2 3.8h7.6l.7 1.7H20V8H4V5.5h3.5z\"/><path d=\"M6 9.5h12l-.8 9.8a1.6 1.6 0 0 1-1.6 1.5H8.4a1.6 1.6 0 0 1-1.6-1.5z\"/>", "down": "<path d=\"M10.8 3.5h2.4v8l2.8-2.8 1.7 1.7L12 15.9 6.3 10.4 8 8.7l2.8 2.8z\"/><rect x=\"5\" y=\"18\" width=\"14\" height=\"2.4\" rx=\"1.2\"/>", "up": "<path d=\"M10.8 16h2.4V8l2.8 2.8 1.7-1.7L12 3.6 6.3 9.1 8 10.8 10.8 8z\"/><rect x=\"5\" y=\"18\" width=\"14\" height=\"2.4\" rx=\"1.2\"/>", "bulb": "<path d=\"M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.1 1 1.9V17h5v-1.2c0-.8.4-1.4 1-1.9A6 6 0 0 0 12 3z\"/><rect x=\"9.5\" y=\"18.3\" width=\"5\" height=\"2.3\" rx=\"1.15\"/>", "check": "<path fill-rule=\"evenodd\" d=\"M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm4.3 6.7-5.1 5.6-2.6-2.5 1.2-1.3 1.3 1.2 3.9-4.2z\"/>", "pausei": "<path fill-rule=\"evenodd\" d=\"M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM9.5 8.5h2v7h-2zm3 0h2v7h-2z\"/>"};
+const I=n=>`<svg class="fi" viewBox="0 0 24 24" aria-hidden="true">${FI[n]}</svg>`;
 const ROWS=[
 {k:'prep',cls:'r6',ic:'clock',name:'Chuẩn bị',sub:'Giây trước khi bắt đầu (0 = tắt)',step:1,min:0,fmt:fmt},
 {k:'hold',cls:'r1',ic:'play',name:'Tập luyện',sub:'Giữ mỗi cái (giây)',step:1,min:1,fmt:fmt},
@@ -223,9 +236,9 @@ const ROWS=[
 {k:'dec',cls:'r4',ic:'loop',name:'Giảm mỗi hiệp',sub:'0 = giữ nguyên các hiệp',step:1,min:0,fmt:v=>v},
 {k:'setRest',cls:'r5',ic:'clock',name:'Nghỉ giữa hiệp',sub:'Giây',step:1,min:0,fmt:fmt},
 {k:'switchRest',cls:'r6',ic:'clock',name:'Nghỉ chuyển bài',sub:'Giây',step:1,min:0,fmt:fmt},
-{k:'goal',cls:'r3',ic:'bolt',name:'Mục tiêu tuần',sub:'Số buổi hoàn thành mỗi tuần (0 = tắt)',step:1,min:0,max:21,fmt:v=>v?v+' buổi':'Tắt'},
-{k:'vol',cls:'r1',ic:'bolt',name:'Âm lượng',sub:'Âm báo và giọng nói',step:10,min:0,max:100,fmt:v=>v+'%'},
-{k:'autolock',cls:'r3',ic:'bolt',name:'Tự khóa khi tập',sub:'Khóa cảm ứng khi bắt đầu buổi tập',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'}
+{k:'goal',cls:'r3',ic:'target',name:'Mục tiêu tuần',sub:'Số buổi hoàn thành mỗi tuần (0 = tắt)',step:1,min:0,max:21,fmt:v=>v?v+' buổi':'Tắt'},
+{k:'vol',cls:'r1',ic:'spk',name:'Âm lượng',sub:'Âm báo và giọng nói',step:10,min:0,max:100,fmt:v=>v+'%'},
+{k:'autolock',cls:'r3',ic:'lockr',name:'Tự khóa khi tập',sub:'Khóa cảm ứng khi bắt đầu buổi tập',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'}
 ];
 const SND=[['beep','Âm báo'],['voice','Giọng nói'],['both','Âm báo + giọng nói'],['off','Tắt']];
 const SNDS={beep:'Âm báo',voice:'Giọng nói',both:'Báo + nói',off:'Tắt'};
@@ -238,9 +251,9 @@ return `<div class="row ${r.cls}">${ICONS[r.ic]}<div class="n" data-k="${r.k}">$
 (r.max===1?`<button class="sw${v?' on':''}" role="switch" aria-checked="${v?'true':'false'}" aria-label="${r.name}" data-k="${r.k}"></button></div>`:
 `<button data-k="${r.k}" data-d="-1">−</button><div class="v" data-k="${r.k}">${r.fmt(v)}</div><button data-k="${r.k}" data-d="1">+</button></div>`);
 }).join('');
-$('voice').innerHTML='🔊 Âm thanh<small>'+SNDS[cfg.snd]+'</small>';
-$('vsel').innerHTML='🗣 Giọng đọc<small>'+vname()+'</small>';
-$('theme').innerHTML='🌓 Giao diện<small>'+THM.find(x=>x[0]===cfg.theme)[1]+'</small>';
+$('voice').innerHTML='<span>'+I('sound')+' Âm thanh</span><small>'+SNDS[cfg.snd]+'</small>';
+$('vsel').innerHTML='<span>'+I('mic')+' Giọng đọc</span><small>'+vname()+'</small>';
+$('theme').innerHTML='<span>'+I('theme')+' Giao diện</span><small>'+THM.find(x=>x[0]===cfg.theme)[1]+'</small>';
 applyTheme();
 if(!running&&!started)showTotal();
 }
@@ -292,7 +305,7 @@ $('top').className='top';$('info').textContent=cfg.ex+' bài × '+cfg.nSets+' hi
 week();sugRender();
 }
 function week(){const d=new Date(),ws=new Date(d.getFullYear(),d.getMonth(),d.getDate()-(d.getDay()+6)%7).getTime(),n=get('hist').filter(x=>x.ok&&x.t>=ws).length,g=cfg.goal;
-$('wk').textContent=g?`Tuần này: ${n}/${g} buổi${n>=g?' 🎉':''}`:'';$('prog').style.width=g?Math.min(100,n/g*100)+'%':'0'}
+$('wk').textContent=g?`Tuần này: ${n}/${g} buổi${n>=g?' · Đạt mục tiêu':''}`:'';$('prog').style.width=g?Math.min(100,n/g*100)+'%':'0'}
 const wk0=d=>{const x=new Date(d);x.setDate(x.getDate()-(x.getDay()+6)%7);return dk(x)};
 const addD=(k,n)=>{const d=new Date(k+'T00:00');d.setDate(d.getDate()+n);return dk(d)};
 const fd=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1);
@@ -310,7 +323,7 @@ return{to:Math.min(30,cfg.hold+2),need};
 function sugRender(){
 const g=suggest(),e=$('sug');
 if(!g||started){e.innerHTML='';return}
-e.innerHTML=`<div class="sug"><b>💡 Gợi ý tăng dần</b>Bạn đã tập đều 3 tuần liên tiếp (từ ${g.need} buổi/tuần) ở mức giữ ${cfg.hold} giây. Có thể thử tăng lên ${g.to} giây. Nếu thấy đau hoặc mỏi bất thường thì giữ nguyên và hỏi chuyên gia.<div><button class="btn p" data-s="ok">Tăng lên ${g.to} giây</button><button class="btn" data-s="later">Để sau 1 tuần</button></div></div>`;
+e.innerHTML=`<div class="sug"><b>${I('bulb')} Gợi ý tăng dần</b>Bạn đã tập đều 3 tuần liên tiếp (từ ${g.need} buổi/tuần) ở mức giữ ${cfg.hold} giây. Có thể thử tăng lên ${g.to} giây. Nếu thấy đau hoặc mỏi bất thường thì giữ nguyên và hỏi chuyên gia.<div><button class="btn p" data-s="ok">Tăng lên ${g.to} giây</button><button class="btn" data-s="later">Để sau 1 tuần</button></div></div>`;
 }
 /* Âm thanh */
 let ac=null;
@@ -351,9 +364,10 @@ function enter(i,q){
 idx=i;const s=steps[i];rem=s.d;lastSec=-1;halfSaid=false;
 const c=COL[s.t];
 $('run').style.background=`linear-gradient(135deg,${c[0]},${c[1]})`;$('rPlay').style.color=c[1];
-$('rTitle').textContent=TITLE[s.t];$('rPhase').textContent=TITLE[s.t];
+$('rPhase').textContent=TITLE[s.t];
 const ex=s.t==='switch'?s.e+1:s.e,st=s.t==='switch'?1:s.t==='setrest'?s.s+1:s.s,sl=cfg.swap&&s.sd?' · '+SIDE[s.sd]:'';
 const S=getSets();
+$('rTitle').textContent=`Bài ${ex}/${cfg.ex} · Hiệp ${st}/${S.length}`;
 dots($('rEx'),cfg.ex,ex);dots($('rSet'),S.length,st);$('rName').textContent=nameOf(ex);
 $('rSub').textContent=s.t==='prep'?'Sẵn sàng nào':s.t==='hold'?`Cái ${s.r}/${s.n}${sl}`:s.t==='rest'?`Cái tiếp theo: ${s.r+1}/${s.n}${sl}`:s.t==='side'?`Tiếp theo: ${SIDE[2].toLowerCase()}`:`Hiệp ${st}: ${S[st-1]} cái${s.t==='setrest'&&cfg.swap?' mỗi bên · '+SIDE[1]:sl}`;
 upd();
@@ -436,7 +450,7 @@ initAudio();
 running=!running;setIcon();saveSess();
 if(running){last=performance.now();requestAnimationFrame(tick)}else if('speechSynthesis' in window)speechSynthesis.cancel();
 };
-$('rCancel').onclick=()=>{if('speechSynthesis' in window)speechSynthesis.cancel();logSess(false);close()};$('rSkip').onclick=()=>{
+$('rCancel').onclick=()=>{if(!confirm('Dừng buổi tập?')){last=performance.now();return}if('speechSynthesis' in window)speechSynthesis.cancel();logSess(false);close()};$('rSkip').onclick=()=>{
 doneTime+=steps[idx].d;
 if(idx+1>=steps.length)finish();else enter(idx+1);
 };
@@ -475,7 +489,7 @@ $('ov').addEventListener('touchmove',e=>{if(!e.target.closest('#mb'))e.preventDe
 function welcome(){
 isWel=true;$('ov').firstElementChild.classList.add('sm');
 $('mtl').textContent='Bấm giờ McGill Big 3';$('mt').style.display='none';
-$('mb').innerHTML=`<p>Đây là <b>ứng dụng bấm giờ tập luyện McGill Big 3</b>: Bộ 3 bài ổn định cột sống do giáo sư Stuart McGill phát triển gồm <b>Curl-Up, Side Plank và Bird-Dog</b>, thường dùng để tăng sức bền cơ lõi và hỗ trợ phòng ngừa đau lưng dưới.</p><ul><li>Bấm giờ giữ, nghỉ, số hiệp; có âm báo và giọng nói tiếng Việt</li><li>Mẫu tập McGill có sẵn (5-3-1, 6-4-2…) và hướng dẫn từng bài</li><li>Tự ghi lịch sử tập theo ngày, tháng, năm</li></ul><p>Bấm ☰ ở góc trên để xem thêm.</p><p>Tác giả: <b>Hoàng Hùng</b></p><label style="display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-size:14px;cursor:pointer"><input type="checkbox" id="nw" style="width:20px;height:20px"> Không hiển thị lại lần sau</label><button class="btn p" data-a="close" style="width:100%;margin:6px 0 0">Bắt đầu</button>`;
+$('mb').innerHTML=`<p>Đây là <b>ứng dụng bấm giờ tập luyện McGill Big 3</b>: Bộ 3 bài ổn định cột sống do giáo sư Stuart McGill phát triển gồm <b>Curl-Up, Side Plank và Bird-Dog</b>, thường dùng để tăng sức bền cơ lõi và hỗ trợ phòng ngừa đau lưng dưới.</p><ul><li>Bấm giờ giữ, nghỉ, số hiệp; có âm báo và giọng nói tiếng Việt</li><li>Mẫu tập McGill có sẵn (5-3-1, 6-4-2…) và hướng dẫn từng bài</li><li>Tự ghi lịch sử tập theo ngày, tháng, năm</li></ul><p>Bấm nút trình đơn ở góc trên để xem thêm.</p><p>Tác giả: <b>Hoàng Hùng</b></p><label style="display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-size:14px;cursor:pointer"><input type="checkbox" id="nw" style="width:20px;height:20px"> Không hiển thị lại lần sau</label><button class="btn p" data-a="close" style="width:100%;margin:6px 0 0">Bắt đầu</button>`;
 openOv();
 }
 function openMenu(){isWel=false;$('ov').firstElementChild.classList.remove('sm');$('mtl').textContent='Trình đơn';$('mt').style.display='flex';mrender();openOv()}
@@ -495,21 +509,21 @@ const vEx=()=>`<p>McGill Big 3 gồm 3 bài, tương ứng Bài 1, 2, 3 trong �
 <div class="it"><b>1. Curl-Up (gập bụng cải tiến)</b><img class="ill" src="curlup.gif" alt="Ảnh động Curl-Up" loading="lazy" onerror="this.outerHTML=IMG.curl"><ul><li>Nằm ngửa, một chân co, chân kia duỗi thẳng. Hai tay đặt dưới thắt lưng để giữ độ cong tự nhiên của lưng.</li><li>Nâng nhẹ đầu và vai lên chỉ vài xăng-ti-mét, giữ cổ và ngực thành một khối, mắt nhìn lên trần.</li><li>Giữ, thở đều rồi hạ xuống. Đổi chân co ở hiệp khác.</li><li>Lỗi hay gặp: cuộn lưng, kéo cổ bằng tay, nín thở, ép lưng xuống sàn.</li></ul></div>
 <div class="it"><b>2. Side Plank (chống nghiêng)</b><img class="ill" src="sideplank.gif" alt="Ảnh động Side Plank" loading="lazy" onerror="this.outerHTML=IMG.side"><ul><li>Nằm nghiêng, khuỷu tay ngay dưới vai, cẳng tay vuông góc với thân.</li><li>Dễ hơn: đầu gối chạm sàn. Khó hơn: duỗi thẳng chân, hai chân chồng lên nhau.</li><li>Nâng hông khỏi sàn để thân thẳng một đường. Tay còn lại đặt trước ngực.</li><li>Làm cả hai bên. Lỗi hay gặp: hông võng, xoay người ra trước hoặc ra sau, nhún vai.</li></ul></div>
 <div class="it"><b>3. Bird-Dog (chó săn chim)</b><img class="ill" src="birddog.gif" alt="Ảnh động Bird-Dog" loading="lazy" onerror="this.outerHTML=IMG.bird"><ul><li>Quỳ bốn điểm, tay dưới vai, gối dưới hông, lưng giữ trung tính.</li><li>Duỗi một chân ra sau ngang hông và tay đối diện ra trước ngang vai, cố giữ hông và vai không xoay.</li><li>Giữ, hạ về rồi đổi bên. Lỗi hay gặp: ưỡn lưng, nâng chân tay quá cao, xoay hông.</li></ul></div>
-<p style="color:var(--mu);font-size:13px">Ảnh động minh họa từng bài: nâng lên, giữ, hạ xuống. Nét đỏ là phần cần chú ý (tay dưới lưng, hông nâng cao, tay và chân duỗi).</p><p>Mẹo trong ứng dụng: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật “Đổi chân / đổi bên” để ứng dụng tự chạy bên trái rồi bên phải trong từng hiệp. Đặt tên bài tại nút “✏️ Tên bài”.</p>
+<p style="color:var(--mu);font-size:13px">Ảnh động minh họa từng bài: nâng lên, giữ, hạ xuống. Nét đỏ là phần cần chú ý (tay dưới lưng, hông nâng cao, tay và chân duỗi).</p><p>Mẹo trong ứng dụng: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật “Đổi chân / đổi bên” để ứng dụng tự chạy bên trái rồi bên phải trong từng hiệp. Đặt tên bài tại nút “Tên bài”.</p>
 <p style="color:var(--mu);font-size:13px">Thông tin chỉ mang tính tham khảo, không thay thế tư vấn y tế. Nếu đang đau lưng nặng, tê hoặc yếu chân, hãy hỏi bác sĩ hoặc chuyên gia vật lý trị liệu trước khi tập.</p>`;
-const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Nút 🔒 ở góc phải màn hình tập: khóa cảm ứng để khỏi bấm nhầm, giữ nút đó khoảng 1,5 giây để mở. Có thể bật “Tự khóa khi tập”.</li><li>“Giọng đọc”: chọn giọng tiếng Việt có sẵn trên máy và nghe thử.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
+const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Nút khóa ở góc phải màn hình tập: khóa cảm ứng để khỏi bấm nhầm, giữ nút đó khoảng 1,5 giây để mở. Có thể bật “Tự khóa khi tập”.</li><li>“Giọng đọc”: chọn giọng tiếng Việt có sẵn trên máy và nghe thử.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
 function vPre(){
 return allP().map((p,i)=>`<div class="it"><b>${esc(p.n)}</b><small>${p.c.ex} bài × ${p.c.nSets} hiệp · ${p.c.first} cái, giảm ${p.c.dec}/hiệp · giữ ${p.c.hold} giây · nghỉ ${p.c.rest} giây · ${p.c.swap?'đổi bên':'một bên'}</small><button class="btn p" data-a="pre" data-i="${i}">Dùng</button>${p.b?'':`<button class="btn" data-a="pdel" data-i="${i-PR.length}">Xóa</button>`}</div>`).join('')+`<button class="btn p" data-a="psave">＋ Lưu cấu hình hiện tại</button>`;
 }
 const hhmm=t=>{const d=new Date(t);return p2(d.getHours())+':'+p2(d.getMinutes())};
 const card=x=>{
 const r=x.rt,sp=x.sp,nl=x.nl;
-return `<div class="it"><b>${x.s0?hhmm(x.s0)+'–':''}${hhmm(x.t)}</b> ${x.ok?'✅ Hoàn thành':'⏸ Bỏ dở'}`+
+return `<div class="it"><b>${x.s0?hhmm(x.s0)+'–':''}${hhmm(x.t)}</b> ${x.ok?'<span style="color:#16a34a">'+I('check')+'</span> Hoàn thành':'<span style="color:#d97706">'+I('pausei')+'</span> Bỏ dở'}`+
 `<small>${x.h} cái × ${x.hd} giây · tập ${fmt(x.el)}</small>`+
 `<small>${x.ex} bài × ${x.ns} hiệp${x.ss?' ('+x.ss.join('·')+' cái)':''}${x.sw===undefined?'':x.sw?' · đổi bên (trái '+x.h1+', phải '+x.h2+')':' · một bên'}</small>`+
 `<small>${nl&&x.pe?nl.map((n,i)=>esc(n)+' '+x.pe[i]).join(' · '):esc(x.nm||'')}</small>`+
 (r?`<small>Nghỉ: cái ${r.rs} giây · hiệp ${r.sr} giây · đổi bên ${r.sd} giây · chuyển bài ${r.sw} giây · chuẩn bị ${r.pr} giây</small>`:'')+
-(!x.ok&&sp&&sp.e?`<small>Dừng ở: ${nl?esc(nl[sp.e-1]||''):'bài '+sp.e}${sp.s?', hiệp '+sp.s:''}${sp.r?', cái '+sp.r:''}${x.sw&&sp.sd?(sp.sd===1?', bên trái':', bên phải'):''}</small>`:'')+`<button class="btn" data-a="sdel" data-t="${x.t}">🗑 Xóa buổi này</button></div>`};
+(!x.ok&&sp&&sp.e?`<small>Dừng ở: ${nl?esc(nl[sp.e-1]||''):'bài '+sp.e}${sp.s?', hiệp '+sp.s:''}${sp.r?', cái '+sp.r:''}${x.sw&&sp.sd?(sp.sd===1?', bên trái':', bên phải'):''}</small>`:'')+`<button class="btn" data-a="sdel" data-t="${x.t}">${I('trash')} Xóa buổi này</button></div>`};
 function vHist(){
 const h=get('hist'),days={};h.forEach(x=>{const k=dk(x.t);days[k]=(days[k]||0)+x.el});
 let s=0,d=new Date();if(!days[dk(d)])d.setDate(d.getDate()-1);
@@ -540,8 +554,8 @@ const ms=Array.from({length:12},(_,i)=>h.filter(x=>inM(x,hy+'-'+p2(i+1))).reduce
 o+=nav(`Năm ${hy}`)+`<div class="yr">`+ms.map((v,i)=>`<div data-a="mon" data-m="${i}">${v?Math.round(v):''}<span style="height:${v/mx*80}%"></span>${i+1}</div>`).join('')+`</div><p>Tổng: ${h.filter(x=>inM(x,hy+'-')).length} buổi · ${Math.round(ms.reduce((a,v)=>a+v,0))} phút (phút mỗi tháng). Bấm cột để xem tháng.</p>`;
 }
 const lab=hv==='day'?'ngày '+hdk.split('-').reverse().join('/'):hv==='week'?'tuần '+fd(new Date(hwk+'T00:00'))+'–'+fd(new Date(addD(hwk,6)+'T00:00')):hv==='month'?`tháng ${hm+1}/${hy}`:`năm ${hy}`;
-const del=`<button class="btn" data-a="clr" data-s="${hv}">🗑 Xóa ${lab}</button><button class="btn" data-a="clr" data-s="all">🗑 Xóa tất cả</button>`;
-return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">⬇ Xuất sao lưu</button><button class="btn" data-a="imp">⬆ Nhập sao lưu</button><button class="btn" data-a="csv">⬇ Xuất CSV</button><br>${del}<p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
+const del=`<button class="btn" data-a="clr" data-s="${hv}">${I('trash')} Xóa ${lab}</button><button class="btn" data-a="clr" data-s="all">${I('trash')} Xóa tất cả</button>`;
+return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">${I('down')} Xuất sao lưu</button><button class="btn" data-a="imp">${I('up')} Nhập sao lưu</button><button class="btn" data-a="csv">${I('down')} Xuất CSV</button><br>${del}<p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
 }
 const syncYM=()=>{hy=+hdk.slice(0,4);hm=+hdk.slice(5,7)-1};
 $('ov').addEventListener('click',e=>{
