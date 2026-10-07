@@ -14,64 +14,72 @@
 :root{--bg:#fff;--tx:#222;--chip:#eee;--mu:#888;--bd:#e5e5e5}
 [data-theme=dark]{--bg:#14161a;--tx:#eee;--chip:#2a2d33;--mu:#9aa;--bd:#33363c}
 body{margin:0;font-family:-apple-system,"SF Pro Display",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
-#app{max-width:480px;min-height:100vh;margin:auto;display:flex;flex-direction:column;background:var(--bg)}
-.top{position:relative;height:52vh;min-height:360px;color:#fff;text-align:center;background:linear-gradient(135deg,#ff6b57,#f4364f 55%,#ee1650);transition:background .4s}
+#app{max-width:480px;min-height:100vh;min-height:100dvh;margin:auto;display:flex;flex-direction:column;background:var(--bg)}
+.top{position:relative;height:52vh;height:52dvh;min-height:340px;color:#fff;text-align:center;background:linear-gradient(135deg,#ff6b57,#f4364f 55%,#ee1650);transition:background .4s}
 .top.rest{background:linear-gradient(135deg,#2dd4bf,#0ea5e9)}
 .top.setrest{background:linear-gradient(135deg,#8b5cf6,#6366f1)}
 .top.switch{background:linear-gradient(135deg,#fbbf24,#f97316)}
-h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 0 0;font-size:24px;font-weight:700}
-#menu{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 16px);width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.25);color:#fff;font-size:22px;cursor:pointer}
+h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 60px 0;font-size:24px;font-weight:700}
+#menu{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 14px);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.25);color:#fff;font-size:22px;cursor:pointer}
 #label{margin-top:34px;font-size:18px;opacity:.9;min-height:24px}
-#time{font-size:96px;font-weight:700;line-height:1.1;margin-top:10px;font-variant-numeric:tabular-nums}
+#time{font-size:80px;font-size:clamp(72px,24vw,96px);font-weight:700;line-height:1.1;margin-top:10px;font-variant-numeric:tabular-nums}
 #info{font-size:16px;opacity:.9;margin-top:6px;min-height:22px}
 #prog{position:absolute;left:0;bottom:0;height:5px;background:rgba(255,255,255,.7);width:0;transition:width .2s}
-.sheet{flex:1;background:var(--bg);border-radius:34px 34px 0 0;margin-top:-34px;position:relative;padding:62px 16px 30px}
+.sheet{flex:1;background:var(--bg);border-radius:34px 34px 0 0;margin-top:-34px;position:relative;padding:62px 16px calc(30px + env(safe-area-inset-bottom,0px))}
 #play{position:absolute;top:-45px;left:50%;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;border:7px solid #f2284f;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 12px var(--bg);padding:0}
 #play svg{width:38px;height:38px;fill:#f2284f}
-.tools{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.tools button{border:0;background:var(--chip);border-radius:14px;padding:10px 14px;font-size:14px;color:var(--tx);cursor:pointer}
-.row{display:flex;align-items:center;border-radius:20px;padding:0 14px 0 18px;height:68px;margin-bottom:11px;font-size:20px;font-weight:600}
-.row .ic{width:30px;height:30px;margin-right:16px;flex:none}
-.row .n{flex:1;cursor:pointer;color:var(--tx)}
-.row .n small{display:block;font-size:12px;font-weight:400;color:var(--mu);margin-top:1px}
-.row .v{font-size:30px;font-weight:600;min-width:70px;text-align:right;cursor:pointer}
-.row button{width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.8);font-size:22px;font-weight:700;margin-left:6px;color:inherit;cursor:pointer}
-.r1{background:#e6f9f0;color:#4ade80}.r2{background:#fde1e6;color:#f2284f}
-.r3{background:#f3f3f3;color:#9a9a9a}.r4{background:#e8eafd;color:#5b6cf0}
-.r5{background:#f1e9fc;color:#8b5cf6}.r6{background:#fdf6e3;color:#f0cc55}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.tools button{border:0;background:var(--chip);border-radius:14px;padding:8px 4px;min-height:52px;font-size:13.5px;font-weight:600;line-height:1.25;color:var(--tx);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.tools small{display:block;font-size:11.5px;font-weight:400;color:var(--mu);margin-top:1px}
+.row{display:flex;align-items:center;border-radius:20px;padding:8px 12px 8px 16px;min-height:68px;margin-bottom:10px;font-size:18px;font-weight:600}
+.row .ic{width:28px;height:28px;margin-right:12px;flex:none}
+.row .n{flex:1;min-width:0;cursor:pointer;color:var(--tx);line-height:1.2}
+.row .n small{display:block;font-size:12px;font-weight:400;line-height:1.25;color:var(--mu);margin-top:2px}
+.row .v{font-size:26px;font-weight:600;min-width:62px;text-align:center;cursor:pointer;font-variant-numeric:tabular-nums}
+.row button{width:42px;height:42px;flex:none;border:0;border-radius:50%;background:rgba(255,255,255,.8);font-size:22px;font-weight:700;margin-left:2px;color:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.r1{background:#e6f9f0;color:#15803d}.r2{background:#fde1e6;color:#d81b45}
+.r3{background:#f3f3f3;color:#5f5f5f}.r4{background:#e8eafd;color:#4350d8}
+.r5{background:#f1e9fc;color:#7c3aed}.r6{background:#fdf6e3;color:#a16207}
 [data-theme=dark] .r1{background:#12301f}[data-theme=dark] .r2{background:#3a1520}[data-theme=dark] .r3{background:#2a2a2a}
 [data-theme=dark] .r4{background:#1b1f45}[data-theme=dark] .r5{background:#2a1c47}[data-theme=dark] .r6{background:#3a3115}
 [data-theme=dark] .row button{background:rgba(255,255,255,.15)}
-#run{display:none;position:fixed;inset:0;z-index:9;flex-direction:column;align-items:center;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 22px) 14px calc(env(safe-area-inset-bottom,0px) + 28px);transition:background .4s}
-#rTitle{font-size:24px;font-weight:700;margin-bottom:22px}
-.pan{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;border:2px solid rgba(255,255,255,.25);border-radius:26px;padding:0 22px;height:78px;margin-bottom:12px;font-size:22px;font-weight:600}
+[data-theme=dark] .r1{color:#4ade80}[data-theme=dark] .r2{color:#ff7b95}[data-theme=dark] .r3{color:#c4c4c4}
+[data-theme=dark] .r4{color:#9aa5ff}[data-theme=dark] .r5{color:#b9a0ff}[data-theme=dark] .r6{color:#f0cc55}
+#run{display:none;position:fixed;inset:0;z-index:9;flex-direction:column;align-items:center;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 16px) 14px calc(env(safe-area-inset-bottom,0px) + 20px);overflow-y:auto;transition:background .4s}
+#rTitle{font-size:24px;font-weight:700;margin-bottom:clamp(8px,2.4dvh,22px)}
+.pan{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;border:2px solid rgba(255,255,255,.25);border-radius:26px;padding:0 20px;height:78px;height:clamp(52px,8dvh,78px);flex:none;margin-bottom:10px;font-size:20px;font-weight:600}
 .dots{display:flex;gap:10px}.dots i{width:19px;height:19px;border-radius:50%;background:rgba(0,0,0,.15)}.dots i.on{background:#fff}
-.ringw{position:relative;width:min(80vw,380px);aspect-ratio:1;margin:auto}
+.ringw{position:relative;flex:none;width:min(80vw,380px);width:clamp(180px,min(80vw,380px,calc(100dvh - 530px)),380px);aspect-ratio:1;margin:auto;container-type:inline-size}
 .ringw svg{width:100%;height:100%;transform:rotate(-90deg)}
 .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #rPhase{font-size:22px;font-weight:600;text-transform:uppercase}
-#rTime{font-size:84px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
-#rTotal{font-size:28px;font-weight:600;display:flex;align-items:center;gap:8px}
-#rName{font-size:38px;font-weight:800;text-transform:uppercase;text-align:center}
-#rSub{opacity:.85;margin:6px 0 24px;height:20px}
+#rTime{font-size:64px;font-size:clamp(44px,22cqw,84px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+#rTotal{font-size:24px;font-weight:600;display:flex;align-items:center;gap:8px}
+#rName{font-size:30px;font-size:clamp(26px,4.6dvh,38px);font-weight:800;text-transform:uppercase;text-align:center;overflow-wrap:anywhere;padding:0 8px}
+#rSub{opacity:.85;margin:6px 0 clamp(10px,2.6dvh,24px);min-height:20px;text-align:center}
 .ctl{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:420px}
-.ctl .c{background:none;border:0;color:#fff;font-size:18px;width:90px;cursor:pointer;text-align:left}
-#rPlay{width:116px;height:116px;border-radius:50%;border:0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ctl .c{background:none;border:0;color:#fff;font-size:18px;width:70px;cursor:pointer;text-align:left}
+#rPlay{width:104px;height:104px;width:clamp(84px,13dvh,116px);height:clamp(84px,13dvh,116px);border-radius:50%;border:0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
 #rPlay svg{width:46px;height:46px;fill:currentColor}
 #rSkip{width:70px;height:70px;border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}
 /* Popup / menu */
 .ov{display:none;overscroll-behavior:contain;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}
-.box{background:var(--bg);color:var(--tx);width:100%;max-width:480px;max-height:90vh;border-radius:26px 26px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
-.mh{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 8px;font-size:20px;font-weight:700}
-.mh button{border:0;background:var(--chip);color:var(--tx);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer}
-.tabs{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
-.tabs .tb{flex:1 1 auto;text-align:center;padding:8px 10px;font-size:13.5px}
-.tb,.btn{border:0;background:var(--chip);color:var(--tx);border-radius:12px;padding:9px 13px;font-size:14px;cursor:pointer;white-space:nowrap}
+.box{background:var(--bg);color:var(--tx);width:100%;max-width:480px;height:84vh;height:84dvh;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 20px);border-radius:28px 28px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 30px rgba(0,0,0,.25);animation:up .24s ease-out}
+.box::before{content:"";flex:none;width:40px;height:5px;border-radius:3px;background:var(--bd);margin:9px auto 0}
+.box.sm{height:auto}
+@keyframes up{from{transform:translateY(28px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.box{animation:none}}
+.mh{flex:none;display:flex;justify-content:space-between;align-items:center;padding:10px 18px 10px;font-size:22px;font-weight:700}
+.mh button{border:0;background:var(--chip);color:var(--tx);width:40px;height:40px;border-radius:50%;font-size:16px;cursor:pointer}
+.tabs{flex:none;display:flex;flex-wrap:nowrap;gap:4px;padding:0 12px 12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .tb{flex:1 0 auto;text-align:center;padding:10px 7px;font-size:13.5px;font-weight:600}
+.tb,.btn{border:0;background:var(--chip);color:var(--tx);border-radius:12px;padding:9px 13px;min-height:38px;font-size:14px;cursor:pointer;white-space:nowrap}
 .tb.on,.btn.p{background:#f2284f;color:#fff}
 .btn{margin:6px 6px 0 0}
-#mb{overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 18px 22px;font-size:15px;line-height:1.5}
+#mb{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 18px 22px;font-size:15px;line-height:1.55}
 html.lock,html.lock body{overflow:hidden}
-#mb a{color:#f2284f}#mb p{margin:8px 0}#mb ul{padding-left:20px;margin:6px 0}
+#mb a{color:#f2284f;font-weight:600;text-decoration:none}#mb p{margin:10px 0}#mb ul{padding-left:20px;margin:6px 0}
 .st{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 8px}
 .st div{background:var(--chip);border-radius:12px;padding:8px 2px;text-align:center;font-size:11px;color:var(--mu)}
 .st b{display:block;font-size:19px;color:var(--tx)}
@@ -84,8 +92,9 @@ html.lock,html.lock body{overflow:hidden}
 .yr{display:flex;align-items:flex-end;gap:5px;height:160px;margin:8px 0}
 .yr div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-size:11px;color:var(--mu);cursor:pointer}
 .yr span{width:100%;background:#f2284f;border-radius:6px 6px 0 0;min-height:2px}
-.it{border:1px solid var(--bd);border-radius:14px;padding:10px 12px;margin:8px 0}
+.it{border:1px solid var(--bd);border-radius:14px;padding:11px 14px;margin:10px 0}
 .it small{display:block;color:var(--mu)}
+.it b{font-size:16px}
 .ill{display:block;width:100%;max-height:130px;margin:6px 0;color:var(--tx)}
 img.ill{max-height:none;height:auto;border-radius:12px}
 </style>
@@ -103,7 +112,7 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <div class="sheet" id="sheet">
 <button id="play" aria-label="Bắt đầu"><svg viewBox="0 0 24 24" id="pi"><path d="M7 4l14 8-14 8z"/></svg></button>
 <div class="tools">
-<button id="voice">🔊 Âm thanh</button><button id="theme">🌓 Giao diện</button><button id="names">✏️ Tên bài</button>
+<button id="voice">🔊 Âm thanh</button><button id="theme">🌓 Giao diện</button><button id="names">✏️ Tên bài<small>Tùy chỉnh</small></button>
 </div>
 <div id="rows"></div>
 </div>
@@ -164,6 +173,7 @@ const ROWS=[
 {k:'switchRest',cls:'r6',ic:'clock',name:'Nghỉ chuyển bài',sub:'Giây',step:1,min:0,fmt:fmt}
 ];
 const SND=[['beep','Âm báo'],['voice','Giọng nói'],['both','Âm báo + giọng nói'],['off','Tắt']];
+const SNDS={beep:'Âm báo',voice:'Giọng nói',both:'Báo + nói',off:'Tắt'};
 const THM=[['auto','Tự động'],['light','Sáng'],['dark','Tối']];
 function applyTheme(){const d=cfg.theme==='dark'||(cfg.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light'}
 function render(){
@@ -172,8 +182,8 @@ const v=cfg[r.k];
 return `<div class="row ${r.cls}">${ICONS[r.ic]}<div class="n" data-k="${r.k}">${r.name}<small>${r.sub}</small></div>`+
 `<button data-k="${r.k}" data-d="-1">−</button><div class="v" data-k="${r.k}">${r.fmt(v)}</div><button data-k="${r.k}" data-d="1">+</button></div>`;
 }).join('');
-$('voice').textContent='🔊 Âm thanh: '+SND.find(x=>x[0]===cfg.snd)[1];
-$('theme').textContent='🌓 Giao diện: '+THM.find(x=>x[0]===cfg.theme)[1];
+$('voice').innerHTML='🔊 Âm thanh<small>'+SNDS[cfg.snd]+'</small>';
+$('theme').innerHTML='🌓 Giao diện<small>'+THM.find(x=>x[0]===cfg.theme)[1]+'</small>';
 applyTheme();
 if(!running&&!started)showTotal();
 }
@@ -329,17 +339,19 @@ $('ov').style.display='none';document.documentElement.classList.remove('lock');
 };
 $('ov').addEventListener('touchmove',e=>{if(!e.target.closest('#mb'))e.preventDefault()},{passive:false});
 function welcome(){
-isWel=true;
+isWel=true;$('ov').firstElementChild.classList.add('sm');
 $('mtl').textContent='Bấm giờ McGill Big 3';$('mt').style.display='none';
 $('mb').innerHTML=`<p>Đây là <b>app bấm giờ tập luyện McGill Big 3</b>: bộ 3 bài ổn định cột sống do GS. Stuart McGill phát triển gồm <b>Curl-Up, Side Plank và Bird-Dog</b>, thường dùng để tăng sức bền cơ lõi và hỗ trợ phòng ngừa đau lưng dưới.</p><ul><li>Bấm giờ giữ, nghỉ, số set; có âm báo và giọng nói tiếng Việt</li><li>Mẫu giờ tập McGill sẵn (5-3-1, 6-4-2...) và hướng dẫn từng bài</li><li>Tự ghi lịch sử tập theo ngày, tháng, năm</li></ul><p>Bấm ☰ ở góc trên để xem thêm.</p><p>Tác giả: <b>Hoàng Hùng</b></p><label style="display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-size:14px;cursor:pointer"><input type="checkbox" id="nw" style="width:20px;height:20px"> Không hiển thị lại lần sau</label><button class="btn p" data-a="close" style="width:100%;margin:6px 0 0">Bắt đầu</button>`;
 openOv();
 }
-function openMenu(){isWel=false;$('mtl').textContent='Menu';$('mt').style.display='flex';mrender();openOv()}
+function openMenu(){isWel=false;$('ov').firstElementChild.classList.remove('sm');$('mtl').textContent='Menu';$('mt').style.display='flex';mrender();openOv()}
 function mrender(){
-$('mt').innerHTML=[['about','Giới thiệu'],['hist','Lịch sử'],['pre','Mẫu giờ tập'],['ex','Bài tập'],['guide','Hướng dẫn']].map(([k,n])=>`<button class="tb${k===mt?' on':''}" data-a="tab" data-t="${k}">${n}</button>`).join('');
+$('mt').innerHTML=[['about','Giới thiệu'],['hist','Lịch sử'],['pre','Mẫu tập'],['ex','Bài tập'],['guide','Hướng dẫn']].map(([k,n])=>`<button class="tb${k===mt?' on':''}" data-a="tab" data-t="${k}">${n}</button>`).join('');
 $('mb').innerHTML=({about:vAbout,hist:vHist,pre:vPre,ex:vEx,guide:vGuide})[mt]();
+const on=$('mt').querySelector('.on');if(on)$('mt').scrollLeft=on.offsetLeft-($('mt').clientWidth-on.offsetWidth)/2;
+$('mb').scrollTop=0;
 }
-const vAbout=()=>`<p><b>Đồng hồ bấm giờ</b> (phiên bản 2.0) là app bấm giờ tập luyện <b>McGill Big 3</b> (Curl-Up, Side Plank, Bird-Dog): chỉnh thời gian giữ, nghỉ, số bài, số set và theo dõi quá trình tập mỗi ngày.</p><p><b>Tác giả:</b> Hoàng Hùng<br><b>SĐT:</b> <a href="tel:0964843943">0964843943</a><br><b>Facebook:</b> <a href="https://fb.com/masterhmh" target="_blank" rel="noopener">fb.com/masterhmh</a></p>`;
+const vAbout=()=>`<p><b>Đồng hồ bấm giờ</b> (phiên bản 2.0) là app bấm giờ tập luyện <b>McGill Big 3</b> (Curl-Up, Side Plank, Bird-Dog): chỉnh thời gian giữ, nghỉ, số bài, số set và theo dõi quá trình tập mỗi ngày.</p><div class="it"><small>Tác giả</small><b>Hoàng Hùng</b></div><div class="it"><small>SĐT</small><a href="tel:0964843943">0964843943</a></div><div class="it"><small>Facebook</small><a href="https://fb.com/masterhmh" target="_blank" rel="noopener">fb.com/masterhmh</a></div>`;
 const IMG={
 curl:`<svg class="ill" viewBox="0 0 240 120" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Minh họa Curl-Up"><path d="M10 104h220" stroke="var(--bd)" stroke-width="3"/><circle cx="44" cy="80" r="9"/><path d="M58 88L76 96H108L150 74L162 100M108 97L196 100"/><path d="M60 90L94 101" stroke="#f2284f" stroke-width="3"/></svg>`,
 side:`<svg class="ill" viewBox="0 0 240 120" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Minh họa Side Plank"><path d="M10 104h220" stroke="var(--bd)" stroke-width="3"/><circle cx="62" cy="50" r="9"/><path d="M76 66L200 100M76 66V104"/><circle cx="138" cy="83" r="4" fill="#f2284f" stroke="none"/></svg>`,
@@ -351,7 +363,7 @@ const vEx=()=>`<p>McGill Big 3 gồm 3 bài, tương ứng Bài 1, 2, 3 trong ap
 <div class="it"><b>3. Bird-Dog (chó săn chim)</b><img class="ill" src="birddog.gif" alt="Ảnh động Bird-Dog" loading="lazy" onerror="this.outerHTML=IMG.bird"><ul><li>Quỳ bốn điểm, tay dưới vai, gối dưới hông, lưng giữ trung tính.</li><li>Duỗi một chân ra sau ngang hông và tay đối diện ra trước ngang vai, cố giữ hông và vai không xoay.</li><li>Giữ, hạ về rồi đổi bên. Lỗi hay gặp: ưỡn lưng, nâng chân tay quá cao, xoay hông.</li></ul></div>
 <p style="color:var(--mu);font-size:13px">Ảnh động minh họa từng bài: nâng lên, giữ, hạ xuống. Nét đỏ là phần cần chú ý (tay dưới lưng, hông nâng cao, tay và chân duỗi).</p><p>Mẹo trong app: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật "Đổi chân / đổi bên" để app tự chạy bên trái rồi bên phải cho mỗi bài. Đặt tên bài tại nút "✏️ Tên bài".</p>
 <p style="color:var(--mu);font-size:13px">Thông tin chỉ mang tính tham khảo, không thay thế tư vấn y tế. Nếu đang đau lưng nặng, tê hoặc yếu chân, hãy hỏi bác sĩ hoặc chuyên gia vật lý trị liệu trước khi tập.</p>`;
-const vGuide=()=>`<p><b>Cách dùng app</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>"Tên bài" để đặt tên từng bài; "Mẫu giờ tập" để lưu và dùng lại cấu hình giờ.</li><li>"Đổi chân / đổi bên": Bật thì mỗi bài chạy bên trái, nghỉ đổi bên rồi chạy bên phải; Tắt thì chỉ chạy một bên.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3-5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm set mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các set; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
+const vGuide=()=>`<p><b>Cách dùng app</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>"Tên bài" để đặt tên từng bài; "Mẫu tập" để lưu và dùng lại cấu hình giờ.</li><li>"Đổi chân / đổi bên": Bật thì mỗi bài chạy bên trái, nghỉ đổi bên rồi chạy bên phải; Tắt thì chỉ chạy một bên.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3-5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm set mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các set; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
 function vPre(){
 return allP().map((p,i)=>`<div class="it"><b>${esc(p.n)}</b><small>${p.c.ex} bài × ${p.c.nSets} set · ${p.c.first} cái, giảm ${p.c.dec}/set · giữ ${p.c.hold}s · nghỉ ${p.c.rest}s · ${p.c.swap?'đổi bên':'một bên'}</small><button class="btn p" data-a="pre" data-i="${i}">Dùng</button>${p.b?'':`<button class="btn" data-a="pdel" data-i="${i-PR.length}">Xóa</button>`}</div>`).join('')+`<button class="btn p" data-a="psave">＋ Lưu cấu hình hiện tại</button>`;
 }
