@@ -60,15 +60,17 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 0 0;font-size:24px
 #rPlay svg{width:46px;height:46px;fill:currentColor}
 #rSkip{width:70px;height:70px;border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}
 /* Popup / menu */
-.ov{display:none;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}
+.ov{display:none;overscroll-behavior:contain;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}
 .box{background:var(--bg);color:var(--tx);width:100%;max-width:480px;max-height:90vh;border-radius:26px 26px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
 .mh{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 8px;font-size:20px;font-weight:700}
 .mh button{border:0;background:var(--chip);color:var(--tx);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer}
-.tabs{display:flex;gap:6px;padding:0 14px 8px;overflow-x:auto}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.tabs .tb{flex:1 1 auto;text-align:center;padding:8px 10px;font-size:13.5px}
 .tb,.btn{border:0;background:var(--chip);color:var(--tx);border-radius:12px;padding:9px 13px;font-size:14px;cursor:pointer;white-space:nowrap}
 .tb.on,.btn.p{background:#f2284f;color:#fff}
 .btn{margin:6px 6px 0 0}
-#mb{overflow:auto;padding:6px 18px 22px;font-size:15px;line-height:1.5}
+#mb{overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 18px 22px;font-size:15px;line-height:1.5}
+html.lock,html.lock body{overflow:hidden}
 #mb a{color:#f2284f}#mb p{margin:8px 0}#mb ul{padding-left:20px;margin:6px 0}
 .st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 8px}
 .st div{background:var(--chip);border-radius:12px;padding:8px 2px;text-align:center;font-size:11px;color:var(--mu)}
@@ -318,14 +320,20 @@ const PR=[
 const PK=['prep','hold','rest','ex','nSets','first','dec','setRest','switchRest','swap','sideRest'];
 const allP=()=>[...PR.map(p=>({...p,b:1})),...get('pre')];
 let mt='about',hv='day',hdk=dk(Date.now()),hy=0,hm=0;
-const openOv=()=>$('ov').style.display='flex';
-const closeOv=()=>$('ov').style.display='none';
+let isWel=false;
+const openOv=()=>{$('ov').style.display='flex';document.documentElement.classList.add('lock')};
+const closeOv=()=>{
+if(isWel){const c=$('nw');if(c&&c.checked)try{localStorage.setItem('hideWel',String(Date.now()))}catch(e){}isWel=false}
+$('ov').style.display='none';document.documentElement.classList.remove('lock');
+};
+$('ov').addEventListener('touchmove',e=>{if(!e.target.closest('#mb'))e.preventDefault()},{passive:false});
 function welcome(){
+isWel=true;
 $('mtl').textContent='Bấm giờ McGill Big 3';$('mt').style.display='none';
-$('mb').innerHTML=`<p>Đây là <b>app bấm giờ tập luyện McGill Big 3</b>: bộ 3 bài ổn định cột sống do GS. Stuart McGill phát triển gồm <b>Curl-Up, Side Plank và Bird-Dog</b>, thường dùng để tăng sức bền cơ lõi và hỗ trợ phòng ngừa đau lưng dưới.</p><ul><li>Bấm giờ giữ, nghỉ, số set; có âm báo và giọng nói tiếng Việt</li><li>Mẫu giờ tập McGill sẵn (5-3-1, 6-4-2...) và hướng dẫn từng bài</li><li>Tự ghi lịch sử tập theo ngày, tháng, năm</li></ul><p>Bấm ☰ ở góc trên để xem thêm.</p><p>Tác giả: <b>Hoàng Hùng</b></p><button class="btn p" data-a="close" style="width:100%;margin:6px 0 0">Bắt đầu</button>`;
+$('mb').innerHTML=`<p>Đây là <b>app bấm giờ tập luyện McGill Big 3</b>: bộ 3 bài ổn định cột sống do GS. Stuart McGill phát triển gồm <b>Curl-Up, Side Plank và Bird-Dog</b>, thường dùng để tăng sức bền cơ lõi và hỗ trợ phòng ngừa đau lưng dưới.</p><ul><li>Bấm giờ giữ, nghỉ, số set; có âm báo và giọng nói tiếng Việt</li><li>Mẫu giờ tập McGill sẵn (5-3-1, 6-4-2...) và hướng dẫn từng bài</li><li>Tự ghi lịch sử tập theo ngày, tháng, năm</li></ul><p>Bấm ☰ ở góc trên để xem thêm.</p><p>Tác giả: <b>Hoàng Hùng</b></p><label style="display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-size:14px;cursor:pointer"><input type="checkbox" id="nw" style="width:20px;height:20px"> Không hiển thị lại lần sau</label><button class="btn p" data-a="close" style="width:100%;margin:6px 0 0">Bắt đầu</button>`;
 openOv();
 }
-function openMenu(){$('mtl').textContent='Menu';$('mt').style.display='flex';mrender();openOv()}
+function openMenu(){isWel=false;$('mtl').textContent='Menu';$('mt').style.display='flex';mrender();openOv()}
 function mrender(){
 $('mt').innerHTML=[['about','Giới thiệu'],['hist','Lịch sử'],['pre','Mẫu giờ tập'],['ex','Bài tập'],['guide','Hướng dẫn']].map(([k,n])=>`<button class="tb${k===mt?' on':''}" data-a="tab" data-t="${k}">${n}</button>`).join('');
 $('mb').innerHTML=({about:vAbout,hist:vHist,pre:vPre,ex:vEx,guide:vGuide})[mt]();
@@ -409,7 +417,9 @@ r.readAsText(f);
 $('menu').onclick=openMenu;
 if('speechSynthesis' in window)speechSynthesis.getVoices();
 render();
-welcome();
+let hw=0;try{hw=+localStorage.getItem('hideWel')||0}catch(e){}
+const hwD=new Date(hw),nwD=new Date();
+if(!hw||nwD.getFullYear()*12+nwD.getMonth()>hwD.getFullYear()*12+hwD.getMonth())welcome();
 </script>
 </body>
 </html>
