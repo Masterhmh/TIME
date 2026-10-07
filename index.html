@@ -31,9 +31,9 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 60px 0;font-size:2
 .sheet{flex:1;background:var(--bg);border-radius:34px 34px 0 0;margin-top:-34px;position:relative;padding:62px 16px calc(30px + env(safe-area-inset-bottom,0px))}
 #play{position:absolute;top:-45px;left:50%;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;border:7px solid #f2284f;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 12px var(--bg);padding:0}
 #play svg{width:38px;height:38px;fill:#f2284f}
-.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
 .tools button{border:0;background:var(--chip);border-radius:14px;padding:8px 4px;min-height:52px;font-size:13.5px;font-weight:600;line-height:1.25;color:var(--tx);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.tools small{display:block;font-size:11.5px;font-weight:400;color:var(--mu);margin-top:1px}
+.tools small{display:block;font-size:11.5px;font-weight:400;color:var(--mu);margin-top:1px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row{display:flex;align-items:center;border-radius:20px;padding:8px 12px 8px 16px;min-height:68px;margin-bottom:10px;font-size:18px;font-weight:600}
 .row .ic{width:28px;height:28px;margin-right:12px;flex:none}
 .row .n{flex:1;min-width:0;cursor:pointer;color:var(--tx);line-height:1.2}
@@ -93,8 +93,14 @@ position:relative;animation:dpop .7s cubic-bezier(.2,1.6,.4,1) .15s both}
 @keyframes dpulse{from{transform:scale(.9);opacity:1}to{transform:scale(1.35);opacity:0}}
 @keyframes dup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#done,#done *,.medal::before{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
-#rPrev{width:56px;height:56px;border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ctl{display:grid;grid-template-columns:1fr 1fr auto 1fr 1fr;align-items:center;justify-items:center}.ctl .c{width:auto;justify-self:start}#rPrev,#rSkip{width:64px;height:64px}#rPrev{border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}
 #wk{font-size:14px;opacity:.9;margin-top:4px;min-height:20px}
+.sug{background:var(--chip);border-radius:16px;padding:12px 14px;margin-bottom:14px;font-size:14px;line-height:1.4}.sug b{display:block;margin-bottom:2px}.sug .btn{margin:8px 8px 0 0}
+#lockBtn{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 12px);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.25);color:#fff;font-size:20px;cursor:pointer;padding:0}
+#lk{display:none;position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.12);color:#fff;touch-action:none;-webkit-user-select:none;user-select:none}
+#lkHold{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 12px);width:44px;height:44px;border:0;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;padding:0;touch-action:none;font-size:20px}
+#lkHold svg{position:absolute;inset:-4px;width:52px;height:52px}
+#lkHint{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 66px);font-size:12px;text-align:right;opacity:.9;max-width:60vw}
 /* Popup / menu */
 .ov{display:none;overscroll-behavior:contain;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}
 .box{background:var(--bg);color:var(--tx);width:100%;max-width:480px;height:84vh;height:84dvh;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 20px);border-radius:28px 28px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 30px rgba(0,0,0,.25);animation:up .24s ease-out}
@@ -146,12 +152,14 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <div class="sheet" id="sheet">
 <button id="play" aria-label="Bắt đầu"><svg viewBox="0 0 24 24" id="pi"><path d="M7 4l14 8-14 8z"/></svg></button>
 <div class="tools">
-<button id="voice">🔊 Âm thanh</button><button id="theme">🌓 Giao diện</button><button id="names">✏️ Tên bài<small>Tùy chỉnh</small></button>
+<button id="voice">🔊 Âm thanh</button><button id="vsel">🗣 Giọng đọc</button><button id="theme">🌓 Giao diện</button><button id="names">✏️ Tên bài<small>Tùy chỉnh</small></button>
 </div>
+<div id="sug"></div>
 <div id="rows"></div>
 </div>
 </div>
 <div id="run">
+<button id="lockBtn" aria-label="Khóa màn hình">🔒</button>
 <div id="rTitle">Tập luyện</div>
 <div class="pan">Bài tập<div class="dots" id="rEx"></div></div>
 <div class="pan">Vòng tập<div class="dots" id="rSet"></div></div>
@@ -175,6 +183,7 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <div id="dStats"></div>
 <button id="dDone">XONG</button>
 </div>
+<div id="lk"><button id="lkHold" aria-label="Giữ để mở khóa"><svg viewBox="0 0 44 44"><circle id="lkRing" cx="22" cy="22" r="20" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="125.7" stroke-dashoffset="125.7" transform="rotate(-90 22 22)"/></svg>🔒</button><div id="lkHint">Màn hình đang khóa. Giữ nút 🔒 khoảng 1,5 giây để mở.</div></div>
 <div class="ov" id="ov"><div class="box">
 <div class="mh"><span id="mtl"></span><button data-a="close" aria-label="Đóng">✕</button></div>
 <div class="tabs" id="mt"></div><div id="mb"></div>
@@ -182,7 +191,7 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <input type="file" id="file" accept=".json,application/json" hidden>
 <script>
 const $=id=>document.getElementById(id);
-const DEF={prep:5,hold:10,rest:3,ex:3,nSets:3,first:5,dec:2,setRest:15,switchRest:30,swap:1,sideRest:10,goal:5,vol:100,snd:'beep',theme:'auto',names:['Curl-Up','Side Plank','Bird-Dog']};
+const DEF={prep:5,hold:10,rest:3,ex:3,nSets:3,first:5,dec:2,setRest:15,switchRest:30,swap:1,sideRest:10,goal:5,vol:100,voice:'',autolock:0,snd:'beep',theme:'auto',names:['Curl-Up','Side Plank','Bird-Dog']};
 let cfg={...DEF};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('cfg')||'{}'))}catch(e){}
 const getSets=(c=cfg)=>Array.from({length:c.nSets},(_,i)=>Math.max(1,c.first-c.dec*i));
@@ -215,7 +224,8 @@ const ROWS=[
 {k:'setRest',cls:'r5',ic:'clock',name:'Nghỉ giữa hiệp',sub:'Giây',step:1,min:0,fmt:fmt},
 {k:'switchRest',cls:'r6',ic:'clock',name:'Nghỉ chuyển bài',sub:'Giây',step:1,min:0,fmt:fmt},
 {k:'goal',cls:'r3',ic:'bolt',name:'Mục tiêu tuần',sub:'Số buổi hoàn thành mỗi tuần (0 = tắt)',step:1,min:0,max:21,fmt:v=>v?v+' buổi':'Tắt'},
-{k:'vol',cls:'r1',ic:'bolt',name:'Âm lượng',sub:'Âm báo và giọng nói',step:10,min:0,max:100,fmt:v=>v+'%'}
+{k:'vol',cls:'r1',ic:'bolt',name:'Âm lượng',sub:'Âm báo và giọng nói',step:10,min:0,max:100,fmt:v=>v+'%'},
+{k:'autolock',cls:'r3',ic:'bolt',name:'Tự khóa khi tập',sub:'Khóa cảm ứng khi bắt đầu buổi tập',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'}
 ];
 const SND=[['beep','Âm báo'],['voice','Giọng nói'],['both','Âm báo + giọng nói'],['off','Tắt']];
 const SNDS={beep:'Âm báo',voice:'Giọng nói',both:'Báo + nói',off:'Tắt'};
@@ -229,6 +239,7 @@ return `<div class="row ${r.cls}">${ICONS[r.ic]}<div class="n" data-k="${r.k}">$
 `<button data-k="${r.k}" data-d="-1">−</button><div class="v" data-k="${r.k}">${r.fmt(v)}</div><button data-k="${r.k}" data-d="1">+</button></div>`);
 }).join('');
 $('voice').innerHTML='🔊 Âm thanh<small>'+SNDS[cfg.snd]+'</small>';
+$('vsel').innerHTML='🗣 Giọng đọc<small>'+vname()+'</small>';
 $('theme').innerHTML='🌓 Giao diện<small>'+THM.find(x=>x[0]===cfg.theme)[1]+'</small>';
 applyTheme();
 if(!running&&!started)showTotal();
@@ -278,10 +289,29 @@ function showTotal(){
 const tot=build().reduce((a,s)=>a+s.d,0);
 $('time').textContent=fmt(tot);$('label').textContent='Tổng thời gian';
 $('top').className='top';$('info').textContent=cfg.ex+' bài × '+cfg.nSets+' hiệp ('+getSets().join('·')+')'+(cfg.swap?' · 2 bên':'');
-week();
+week();sugRender();
 }
 function week(){const d=new Date(),ws=new Date(d.getFullYear(),d.getMonth(),d.getDate()-(d.getDay()+6)%7).getTime(),n=get('hist').filter(x=>x.ok&&x.t>=ws).length,g=cfg.goal;
 $('wk').textContent=g?`Tuần này: ${n}/${g} buổi${n>=g?' 🎉':''}`:'';$('prog').style.width=g?Math.min(100,n/g*100)+'%':'0'}
+const wk0=d=>{const x=new Date(d);x.setDate(x.getDate()-(x.getDay()+6)%7);return dk(x)};
+const addD=(k,n)=>{const d=new Date(k+'T00:00');d.setDate(d.getDate()+n);return dk(d)};
+const fd=d=>p2(d.getDate())+'/'+p2(d.getMonth()+1);
+const vname=()=>{try{return (speechSynthesis.getVoices().find(v=>v.voiceURI===cfg.voice)||{}).name||'Tự động'}catch(e){return 'Tự động'}};
+function suggest(){
+if(cfg.hold>=30)return null;
+let until=0;try{until=+localStorage.getItem('sugOff')||0}catch(e){}
+if(Date.now()<until)return null;
+const need=Math.max(1,Math.min(cfg.goal||3,3)),cnt={};
+get('hist').filter(x=>x.ok&&x.hd>=cfg.hold).forEach(x=>{const k=wk0(new Date(x.t));cnt[k]=(cnt[k]||0)+1});
+const cur=wk0(new Date());let k=(cnt[cur]||0)>=need?cur:addD(cur,-7);
+for(let i=0;i<3;i++,k=addD(k,-7))if((cnt[k]||0)<need)return null;
+return{to:Math.min(30,cfg.hold+2),need};
+}
+function sugRender(){
+const g=suggest(),e=$('sug');
+if(!g||started){e.innerHTML='';return}
+e.innerHTML=`<div class="sug"><b>💡 Gợi ý tăng dần</b>Bạn đã tập đều 3 tuần liên tiếp (từ ${g.need} buổi/tuần) ở mức giữ ${cfg.hold} giây. Có thể thử tăng lên ${g.to} giây. Nếu thấy đau hoặc mỏi bất thường thì giữ nguyên và hỏi chuyên gia.<div><button class="btn p" data-s="ok">Tăng lên ${g.to} giây</button><button class="btn" data-s="later">Để sau 1 tuần</button></div></div>`;
+}
 /* Âm thanh */
 let ac=null;
 function initAudio(){
@@ -295,10 +325,10 @@ o.frequency.value=f;o.connect(g);g.connect(ac.destination);
 g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+d);
 o.start(t);o.stop(t+d+.02);
 }
-function say(t){
-if(!(cfg.snd==='voice'||cfg.snd==='both')||!t||!('speechSynthesis' in window))return;
+function say(t,force,uri){
+if(!(force||cfg.snd==='voice'||cfg.snd==='both')||!t||!('speechSynthesis' in window))return;
 const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';u.rate=1.05;u.volume=cfg.vol/100;
-const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsWith('vi'));if(v)u.voice=v;
+const vs=speechSynthesis.getVoices(),want=uri!==undefined?uri:cfg.voice,v=(want&&vs.find(x=>x.voiceURI===want))||vs.find(x=>x.lang&&x.lang.toLowerCase().startsWith('vi'));if(v){u.voice=v;u.lang=v.lang}
 speechSynthesis.cancel();speechSynthesis.speak(u);
 }
 function cueStart(s){
@@ -351,7 +381,7 @@ requestAnimationFrame(tick);
 }
 function setIcon(){$('rpi').innerHTML=running?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M7 4l14 8-14 8z"/>'}
 async function wake(on){try{if(on){if(!wl||wl.released)wl=await navigator.wakeLock.request('screen')}else if(wl){wl.release();wl=null}}catch(e){}}
-function close(){clearSess();running=false;started=false;wake(false);$('run').style.display='none';showTotal()}
+function close(){clearSess();lock(false);running=false;started=false;wake(false);$('run').style.display='none';showTotal()}
 /* Ghi lịch sử */
 function logSess(ok){
 const n=ok?steps.length:idx,dn=steps.slice(0,n).filter(s=>s.t==='hold'),h=dn.length;
@@ -385,7 +415,7 @@ if(P.length||el<2500)cfRaf=requestAnimationFrame(f);else x.clearRect(0,0,W,H);
 })(t0);
 }
 function finish(){
-running=false;logSess(true);clearSess();wake(false);
+running=false;logSess(true);clearSess();lock(false);wake(false);
 [523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.18),i*180));setTimeout(()=>beep(1047,.6),540);
 say('Hoàn thành buổi tập. Tuyệt vời');
 try{navigator.vibrate&&navigator.vibrate([200,100,200,100,400])}catch(e){}
@@ -398,7 +428,7 @@ $('play').onclick=()=>{
 initAudio();
 steps=build();if(!steps.length)return;
 totalAll=steps.reduce((a,s)=>a+s.d,0);doneTime=0;started=true;running=true;sessStart=Date.now();
-$('run').style.display='flex';last=performance.now();enter(0);setIcon();wake(true);
+$('run').style.display='flex';last=performance.now();enter(0);setIcon();wake(true);if(cfg.autolock)lock(true);
 requestAnimationFrame(tick);
 };
 $('rPlay').onclick=()=>{
@@ -412,6 +442,16 @@ if(idx+1>=steps.length)finish();else enter(idx+1);
 };
 $('rPrev').onclick=()=>{const s=steps[idx];last=performance.now();if(idx===0||s.d-rem>2)enter(idx);else{doneTime-=steps[idx-1].d;enter(idx-1)}};
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&started&&running)wake(true)});
+let lkT=0;
+function lock(on){$('lk').style.display=on?'block':'none';if(!on){clearTimeout(lkT);const r=$('lkRing');r.style.transition='none';r.style.strokeDashoffset=125.7}}
+$('lockBtn').onclick=()=>lock(true);
+const lh=$('lkHold');
+lh.addEventListener('pointerdown',e=>{e.preventDefault();const r=$('lkRing');r.style.transition='none';r.style.strokeDashoffset=125.7;void r.getBoundingClientRect();r.style.transition='stroke-dashoffset 1.5s linear';r.style.strokeDashoffset=0;clearTimeout(lkT);lkT=setTimeout(()=>{lock(false);try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}},1500)});
+['pointerup','pointercancel','pointerleave'].forEach(t=>lh.addEventListener(t,()=>{clearTimeout(lkT);const r=$('lkRing');r.style.transition='none';r.style.strokeDashoffset=125.7}));
+lh.addEventListener('contextmenu',e=>e.preventDefault());
+$('lk').addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+$('sug').onclick=e=>{const a=e.target.dataset.s,g=suggest();if(!a||!g)return;
+if(a==='ok'){cfg.hold=g.to;save();render()}else{try{localStorage.setItem('sugOff',String(Date.now()+7*864e5))}catch(x){}sugRender()}};
 /* Popup & menu */
 const mk=(first,dec,nSets,swap=1)=>({prep:5,hold:10,rest:3,ex:3,nSets,first,dec,setRest:15,switchRest:30,swap,sideRest:10,names:[...BIG3]});
 const PR=[
@@ -424,7 +464,7 @@ const PR=[
 ];
 const PK=['prep','hold','rest','ex','nSets','first','dec','setRest','switchRest','swap','sideRest'];
 const allP=()=>[...PR.map(p=>({...p,b:1})),...get('pre')];
-let mt='about',hv='day',hdk=dk(Date.now()),hy=0,hm=0;
+let mt='about',hv='day',hdk=dk(Date.now()),hy=0,hm=0,hwk=wk0(new Date());
 let isWel=false;
 const openOv=()=>{$('ov').style.display='flex';document.documentElement.classList.add('lock')};
 const closeOv=()=>{
@@ -457,7 +497,7 @@ const vEx=()=>`<p>McGill Big 3 gồm 3 bài, tương ứng Bài 1, 2, 3 trong �
 <div class="it"><b>3. Bird-Dog (chó săn chim)</b><img class="ill" src="birddog.gif" alt="Ảnh động Bird-Dog" loading="lazy" onerror="this.outerHTML=IMG.bird"><ul><li>Quỳ bốn điểm, tay dưới vai, gối dưới hông, lưng giữ trung tính.</li><li>Duỗi một chân ra sau ngang hông và tay đối diện ra trước ngang vai, cố giữ hông và vai không xoay.</li><li>Giữ, hạ về rồi đổi bên. Lỗi hay gặp: ưỡn lưng, nâng chân tay quá cao, xoay hông.</li></ul></div>
 <p style="color:var(--mu);font-size:13px">Ảnh động minh họa từng bài: nâng lên, giữ, hạ xuống. Nét đỏ là phần cần chú ý (tay dưới lưng, hông nâng cao, tay và chân duỗi).</p><p>Mẹo trong ứng dụng: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật “Đổi chân / đổi bên” để ứng dụng tự chạy bên trái rồi bên phải trong từng hiệp. Đặt tên bài tại nút “✏️ Tên bài”.</p>
 <p style="color:var(--mu);font-size:13px">Thông tin chỉ mang tính tham khảo, không thay thế tư vấn y tế. Nếu đang đau lưng nặng, tê hoặc yếu chân, hãy hỏi bác sĩ hoặc chuyên gia vật lý trị liệu trước khi tập.</p>`;
-const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
+const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Nút 🔒 ở góc phải màn hình tập: khóa cảm ứng để khỏi bấm nhầm, giữ nút đó khoảng 1,5 giây để mở. Có thể bật “Tự khóa khi tập”.</li><li>“Giọng đọc”: chọn giọng tiếng Việt có sẵn trên máy và nghe thử.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
 function vPre(){
 return allP().map((p,i)=>`<div class="it"><b>${esc(p.n)}</b><small>${p.c.ex} bài × ${p.c.nSets} hiệp · ${p.c.first} cái, giảm ${p.c.dec}/hiệp · giữ ${p.c.hold} giây · nghỉ ${p.c.rest} giây · ${p.c.swap?'đổi bên':'một bên'}</small><button class="btn p" data-a="pre" data-i="${i}">Dùng</button>${p.b?'':`<button class="btn" data-a="pdel" data-i="${i-PR.length}">Xóa</button>`}</div>`).join('')+`<button class="btn p" data-a="psave">＋ Lưu cấu hình hiện tại</button>`;
 }
@@ -479,12 +519,15 @@ keys.forEach(k=>{const q=k.split('-'),n=Date.UTC(+q[0],+q[1]-1,+q[2])/864e5;run=
 const inM=(x,p)=>dk(x.t).startsWith(p),sum=l=>l.reduce((a,x)=>a+x.el,0);
 const best=h.reduce((a,x)=>Math.max(a,x.h?x.hd:0),0);
 let o=`<div class="st"><div><b>${s}</b>ngày liên tiếp</div><div><b>${Math.max(lg,s)}</b>chuỗi dài nhất</div><div><b>${keys.length}</b>ngày đã tập</div><div><b>${Math.round(sum(h.filter(x=>inM(x,dk(Date.now()).slice(0,7))))/60)}</b>phút tháng này</div><div><b>${best} giây</b>giữ lâu nhất</div><div><b>${h.length}</b>buổi tập</div></div>`;
-o+=[['day','Ngày'],['month','Tháng'],['year','Năm']].map(([k,n])=>`<button class="tb${k===hv?' on':''}" data-a="hv" data-v="${k}" style="margin-right:6px">${n}</button>`).join('');
+o+=[['day','Ngày'],['week','Tuần'],['month','Tháng'],['year','Năm']].map(([k,n])=>`<button class="tb${k===hv?' on':''}" data-a="hv" data-v="${k}" style="margin-right:6px">${n}</button>`).join('');
 const nav=t=>`<div class="nav"><button class="btn" data-a="nav" data-n="-1">◀</button>${t}<button class="btn" data-a="nav" data-n="1">▶</button></div>`;
 if(hv==='day'){
 const l=h.filter(x=>dk(x.t)===hdk).sort((a,b)=>a.t-b.t),[y,m,dd]=hdk.split('-');
 o+=nav(`${dd}/${m}/${y}`);
 o+=l.length?l.map(card).join('')+`<p>Tổng: ${l.length} buổi · ${fmt(sum(l))}</p>`:'<p>Chưa có buổi tập nào trong ngày này.</p>';
+}else if(hv==='week'){
+const ds=Array.from({length:7},(_,i)=>new Date(addD(hwk,i)+'T00:00')),ms=ds.map(d=>(days[dk(d)]||0)/60),mx=Math.max(...ms,1),l=h.filter(x=>{const k=dk(x.t);return k>=hwk&&k<=addD(hwk,6)}),nm=['T2','T3','T4','T5','T6','T7','CN'];
+o+=nav(`${fd(ds[0])} – ${fd(ds[6])}`)+`<div class="yr">`+ds.map((d,i)=>`<div data-a="day" data-d="${dk(d)}">${ms[i]?Math.round(ms[i]):''}<span style="height:${ms[i]/mx*80}%"></span>${nm[i]}</div>`).join('')+`</div><p>${l.length} buổi · ${new Set(l.map(x=>dk(x.t))).size} ngày tập · ${Math.round(sum(l)/60)} phút (phút mỗi ngày).${cfg.goal?` Mục tiêu: ${l.filter(x=>x.ok).length}/${cfg.goal} buổi hoàn thành.`:''} Bấm cột để xem ngày.</p>`;
 }else if(hv==='month'){
 const pre=hy+'-'+p2(hm+1),dim=new Date(hy,hm+1,0).getDate(),off=(new Date(hy,hm,1).getDay()+6)%7,td=dk(Date.now());
 let c=['T2','T3','T4','T5','T6','T7','CN'].map(x=>`<i>${x}</i>`).join('')+'<b class="n"></b>'.repeat(off);
@@ -496,7 +539,7 @@ o+=nav(`Tháng ${hm+1}/${hy}`)+`<div class="cal">${c}</div><p>${l.length} buổi
 const ms=Array.from({length:12},(_,i)=>h.filter(x=>inM(x,hy+'-'+p2(i+1))).reduce((a,x)=>a+x.el,0)/60),mx=Math.max(...ms,1);
 o+=nav(`Năm ${hy}`)+`<div class="yr">`+ms.map((v,i)=>`<div data-a="mon" data-m="${i}">${v?Math.round(v):''}<span style="height:${v/mx*80}%"></span>${i+1}</div>`).join('')+`</div><p>Tổng: ${h.filter(x=>inM(x,hy+'-')).length} buổi · ${Math.round(ms.reduce((a,v)=>a+v,0))} phút (phút mỗi tháng). Bấm cột để xem tháng.</p>`;
 }
-const lab=hv==='day'?'ngày '+hdk.split('-').reverse().join('/'):hv==='month'?`tháng ${hm+1}/${hy}`:`năm ${hy}`;
+const lab=hv==='day'?'ngày '+hdk.split('-').reverse().join('/'):hv==='week'?'tuần '+fd(new Date(hwk+'T00:00'))+'–'+fd(new Date(addD(hwk,6)+'T00:00')):hv==='month'?`tháng ${hm+1}/${hy}`:`năm ${hy}`;
 const del=`<button class="btn" data-a="clr" data-s="${hv}">🗑 Xóa ${lab}</button><button class="btn" data-a="clr" data-s="all">🗑 Xóa tất cả</button>`;
 return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">⬇ Xuất sao lưu</button><button class="btn" data-a="imp">⬆ Nhập sao lưu</button><button class="btn" data-a="csv">⬇ Xuất CSV</button><br>${del}<p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
 }
@@ -506,10 +549,11 @@ if(e.target===$('ov')){closeOv();return}
 const b=e.target.closest('[data-a]');if(!b)return;
 const a=b.dataset.a,D=b.dataset;
 if(a==='close')closeOv();
-else if(a==='tab'){mt=D.t;if(mt==='hist'){hdk=dk(Date.now());syncYM()}mrender()}
-else if(a==='hv'){hv=D.v;syncYM();mrender()}
+else if(a==='tab'){mt=D.t;if(mt==='hist'){hdk=dk(Date.now());hwk=wk0(new Date());syncYM()}mrender()}
+else if(a==='hv'){hv=D.v;syncYM();if(hv==='week')hwk=wk0(new Date(hdk+'T00:00'));mrender()}
 else if(a==='nav'){const n=+D.n;
 if(hv==='day'){const d=new Date(hdk+'T00:00');d.setDate(d.getDate()+n);hdk=dk(d);syncYM()}
+else if(hv==='week'){hwk=addD(hwk,7*n)}
 else if(hv==='month'){hm+=n;if(hm<0){hm=11;hy--}if(hm>11){hm=0;hy++}}
 else hy+=n;
 mrender()}
@@ -518,6 +562,8 @@ else if(a==='mon'){hm=+D.m;hv='month';mrender()}
 else if(a==='pre'){const p=allP()[+D.i];Object.assign(cfg,p.c);cfg.names=p.c.names?[...p.c.names]:[];save();render();closeOv()}
 else if(a==='pdel'){const l=get('pre');l.splice(+D.i,1);put('pre',l);mrender()}
 else if(a==='psave'){const n=prompt('Tên mẫu tập');if(n&&n.trim()){const c={};PK.forEach(k=>c[k]=cfg[k]);c.names=[...(cfg.names||[])];put('pre',[...get('pre'),{n:n.trim(),c}]);mrender()}}
+else if(a==='vc'){cfg.voice=D.u;save();render();openVoices()}
+else if(a==='vt')say('Xin chào, đây là giọng đọc thử',1,D.u)
 else if(a==='sdel'){if(confirm('Xóa buổi tập này? Không thể hoàn tác.')){put('hist',get('hist').filter(x=>x.t!==+D.t));mrender()}}
 else if(a==='csv'){const q=v=>'"'+String(v).replace(/"/g,'""')+'"',h=get('hist');
 const R=[['Ngày','Bắt đầu','Kết thúc','Trạng thái','Số cái','Giây/cái','Thời gian tập (s)','Bài','Hiệp','Đổi bên','Chi tiết bài'],...h.map(x=>[dk(x.t),x.s0?hhmm(x.s0):'',hhmm(x.t),x.ok?'Hoàn thành':'Bỏ dở',x.h,x.hd,x.el,x.ex,x.ns,x.sw?'Có':'Không',x.nl&&x.pe?x.nl.map((n,i)=>n+' '+x.pe[i]).join('; '):(x.nm||'')])];
@@ -526,13 +572,14 @@ else if(a==='exp'){const u=URL.createObjectURL(new Blob([JSON.stringify({v:1,cfg
 else if(a==='imp')$('file').click();
 else if(a==='clr'){
 const sc=D.s,h=get('hist');
-let pre='',lab='toàn bộ lịch sử tập luyện';
-if(sc==='day'){pre=hdk;lab='lịch sử ngày '+hdk.split('-').reverse().join('/')}
-else if(sc==='month'){pre=hy+'-'+p2(hm+1);lab=`lịch sử tháng ${hm+1}/${hy}`}
-else if(sc==='year'){pre=hy+'-';lab='lịch sử năm '+hy}
-const hit=h.filter(x=>dk(x.t).startsWith(pre));
-if(!hit.length){alert('Không có buổi tập nào để xóa.');return}
-if(confirm(`Xóa ${lab} (${hit.length} buổi tập)? Không thể hoàn tác.`)){put('hist',h.filter(x=>!dk(x.t).startsWith(pre)));mrender()}
+let f=()=>true,lab='toàn bộ lịch sử tập luyện';
+if(sc==='day'){f=x=>dk(x.t)===hdk;lab='lịch sử ngày '+hdk.split('-').reverse().join('/')}
+else if(sc==='week'){const e=addD(hwk,6);f=x=>{const k=dk(x.t);return k>=hwk&&k<=e};lab='lịch sử tuần '+fd(new Date(hwk+'T00:00'))+'–'+fd(new Date(e+'T00:00'))}
+else if(sc==='month'){const pre=hy+'-'+p2(hm+1);f=x=>dk(x.t).startsWith(pre);lab=`lịch sử tháng ${hm+1}/${hy}`}
+else if(sc==='year'){const pre=hy+'-';f=x=>dk(x.t).startsWith(pre);lab='lịch sử năm '+hy}
+const n=h.filter(f).length;
+if(!n){alert('Không có buổi tập nào để xóa.');return}
+if(confirm(`Xóa ${lab} (${n} buổi tập)? Không thể hoàn tác.`)){put('hist',h.filter(x=>!f(x)));mrender()}
 }
 });
 $('file').onchange=e=>{
@@ -547,11 +594,18 @@ render();mrender();alert('Đã nhập dữ liệu sao lưu.');
 }catch(x){alert('Tệp sao lưu không hợp lệ.')}};
 r.readAsText(f);
 };
+function openVoices(){
+isWel=false;$('ov').firstElementChild.classList.remove('sm');$('mtl').textContent='Giọng đọc';$('mt').style.display='none';
+const vs=speechSynthesis.getVoices(),vi=vs.filter(v=>/^vi/i.test(v.lang)),list=vi.length?vi:vs;
+const row=(n,l,u)=>`<div class="it"><b>${esc(n)}</b><small>${esc(l)}</small><button class="btn${cfg.voice===u?' p':''}" data-a="vc" data-u="${esc(u)}">Chọn</button><button class="btn" data-a="vt" data-u="${esc(u)}">Nghe thử</button></div>`;
+$('mb').innerHTML=`<p>${vi.length?'Các giọng tiếng Việt trên máy:':'Máy không có giọng tiếng Việt, hiển thị tất cả giọng có sẵn:'}</p>`+row('Tự động','Giọng tiếng Việt đầu tiên tìm thấy','')+list.map(v=>row(v.name,v.lang,v.voiceURI)).join('')+'<p style="color:var(--mu);font-size:13px">Muốn thêm giọng: vào Cài đặt của máy, mục giọng nói/trợ năng để tải giọng tiếng Việt chất lượng cao.</p>';
+openOv()}
+$('vsel').onclick=()=>{if(!('speechSynthesis' in window)){alert('Thiết bị không hỗ trợ giọng đọc.');return}openVoices()};
 $('menu').onclick=openMenu;
 ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
 document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
 document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
-if('speechSynthesis' in window)speechSynthesis.getVoices();
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{if(!started)render()}}
 render();
 let hw=0;try{hw=+localStorage.getItem('hideWel')||0}catch(e){}
 const hwD=new Date(hw),nwD=new Date();
