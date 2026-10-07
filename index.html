@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Đồng hồ bấm giờ</title>
 <link rel="apple-touch-icon" href="/icon.png">
 <link rel="icon" type="image/png" href="/icon.png">
@@ -10,7 +10,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Bấm giờ">
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{-webkit-text-size-adjust:100%;touch-action:pan-x pan-y}
 :root{--bg:#fff;--tx:#222;--chip:#eee;--mu:#888;--bd:#e5e5e5}
 [data-theme=dark]{--bg:#14161a;--tx:#eee;--chip:#2a2d33;--mu:#9aa;--bd:#33363c}
 body{margin:0;font-family:-apple-system,"SF Pro Display",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
@@ -37,6 +38,13 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 60px 0;font-size:2
 .row .n small{display:block;font-size:12px;font-weight:400;line-height:1.25;color:var(--mu);margin-top:2px}
 .row .v{font-size:26px;font-weight:600;min-width:62px;text-align:center;cursor:pointer;font-variant-numeric:tabular-nums}
 .row button{width:42px;height:42px;flex:none;border:0;border-radius:50%;background:rgba(255,255,255,.8);font-size:22px;font-weight:700;margin-left:2px;color:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.row button.sw{width:60px;height:34px;border-radius:17px;background:rgba(0,0,0,.18);position:relative;margin:0 6px 0 8px;padding:0;transition:background .2s}
+.row button.sw::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.row button.sw.on{background:currentColor}
+.row button.sw.on::after{transform:translateX(26px)}
+[data-theme=dark] .row button.sw{background:rgba(255,255,255,.25)}
+[data-theme=dark] .row button.sw.on{background:currentColor}
+@media (prefers-reduced-motion:reduce){.row button.sw,.row button.sw::after{transition:none}}
 .r1{background:#e6f9f0;color:#15803d}.r2{background:#fde1e6;color:#d81b45}
 .r3{background:#f3f3f3;color:#5f5f5f}.r4{background:#e8eafd;color:#4350d8}
 .r5{background:#f1e9fc;color:#7c3aed}.r6{background:#fdf6e3;color:#a16207}
@@ -164,12 +172,12 @@ const ROWS=[
 {k:'hold',cls:'r1',ic:'play',name:'Tập luyện',sub:'Giữ mỗi cái (giây)',step:1,min:1,fmt:fmt},
 {k:'rest',cls:'r2',ic:'pause',name:'Nghỉ ngơi',sub:'Nghỉ giữa các cái (giây)',step:1,min:0,fmt:fmt},
 {k:'ex',cls:'r3',ic:'bolt',name:'Bài tập',sub:'Số bài',step:1,min:1,fmt:v=>v},
-{k:'swap',cls:'r5',ic:'loop',name:'Đổi chân / đổi bên',sub:'Bật: mỗi bài làm bên trái rồi bên phải',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'},
+{k:'swap',cls:'r5',ic:'loop',name:'Đổi chân / đổi bên',sub:'Bật: mỗi hiệp làm bên trái rồi bên phải',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'},
+{k:'sideRest',cls:'r5',ic:'clock',name:'Nghỉ đổi bên',sub:'Giây (giữa trái và phải)',step:1,min:0,fmt:fmt,need:'swap'},
 {k:'nSets',cls:'r4',ic:'loop',name:'Số hiệp',sub:'Số hiệp mỗi bài',step:1,min:1,fmt:v=>v},
 {k:'first',cls:'r4',ic:'loop',name:'Số cái ở hiệp đầu',sub:'Hiệp đầu tiên có bao nhiêu cái',step:1,min:1,fmt:v=>v},
 {k:'dec',cls:'r4',ic:'loop',name:'Giảm mỗi hiệp',sub:'0 = giữ nguyên các hiệp',step:1,min:0,fmt:v=>v},
 {k:'setRest',cls:'r5',ic:'clock',name:'Nghỉ giữa hiệp',sub:'Giây',step:1,min:0,fmt:fmt},
-{k:'sideRest',cls:'r5',ic:'clock',name:'Nghỉ đổi bên',sub:'Giây',step:1,min:0,fmt:fmt},
 {k:'switchRest',cls:'r6',ic:'clock',name:'Nghỉ chuyển bài',sub:'Giây',step:1,min:0,fmt:fmt}
 ];
 const SND=[['beep','Âm báo'],['voice','Giọng nói'],['both','Âm báo + giọng nói'],['off','Tắt']];
@@ -177,10 +185,11 @@ const SNDS={beep:'Âm báo',voice:'Giọng nói',both:'Báo + nói',off:'Tắt'}
 const THM=[['auto','Tự động'],['light','Sáng'],['dark','Tối']];
 function applyTheme(){const d=cfg.theme==='dark'||(cfg.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light'}
 function render(){
-$('rows').innerHTML=ROWS.map(r=>{
+$('rows').innerHTML=ROWS.filter(r=>!r.need||cfg[r.need]).map(r=>{
 const v=cfg[r.k];
 return `<div class="row ${r.cls}">${ICONS[r.ic]}<div class="n" data-k="${r.k}">${r.name}<small>${r.sub}</small></div>`+
-`<button data-k="${r.k}" data-d="-1">−</button><div class="v" data-k="${r.k}">${r.fmt(v)}</div><button data-k="${r.k}" data-d="1">+</button></div>`;
+(r.max===1?`<button class="sw${v?' on':''}" role="switch" aria-checked="${v?'true':'false'}" aria-label="${r.name}" data-k="${r.k}"></button></div>`:
+`<button data-k="${r.k}" data-d="-1">−</button><div class="v" data-k="${r.k}">${r.fmt(v)}</div><button data-k="${r.k}" data-d="1">+</button></div>`);
 }).join('');
 $('voice').innerHTML='🔊 Âm thanh<small>'+SNDS[cfg.snd]+'</small>';
 $('theme').innerHTML='🌓 Giao diện<small>'+THM.find(x=>x[0]===cfg.theme)[1]+'</small>';
@@ -191,6 +200,7 @@ $('rows').addEventListener('click',e=>{
 if(started)return;
 const k=e.target.dataset.k;if(!k)return;
 const r=ROWS.find(x=>x.k===k);
+if(r.max===1&&!e.target.dataset.d){cfg[k]=cfg[k]?0:1;save();render();return}
 if(e.target.dataset.d){
 cfg[k]=Math.min(r.max||1e4,Math.max(r.min,cfg[k]+r.step*e.target.dataset.d));
 save();render();return;
@@ -209,16 +219,16 @@ function build(){
 const st=[],S=getSets(),sides=cfg.swap?2:1;
 if(cfg.prep>0)st.push({t:'prep',d:cfg.prep,e:1,s:1,label:'Chuẩn bị'});
 for(let e=1;e<=cfg.ex;e++){
-for(let sd=1;sd<=sides;sd++){
 S.forEach((n,si)=>{
+for(let sd=1;sd<=sides;sd++){
 for(let r=1;r<=n;r++){
 st.push({t:'hold',d:cfg.hold,e,s:si+1,r,n,sd,label:'Giữ'});
 if(r<n&&cfg.rest>0)st.push({t:'rest',d:cfg.rest,e,s:si+1,r,n,sd,label:'Nghỉ'});
 }
-if(si<S.length-1&&cfg.setRest>0)st.push({t:'setrest',d:cfg.setRest,e,s:si+1,sd,label:'Nghỉ giữa hiệp',say:`Xong hiệp ${si+1}. Nghỉ ${cfg.setRest} giây. Hiệp tiếp theo ${S[si+1]} cái`});
-});
-if(sd<sides&&cfg.sideRest>0)st.push({t:'side',d:cfg.sideRest,e,sd,label:'Đổi bên',say:`Xong bên trái. Nghỉ ${cfg.sideRest} giây, đổi sang bên phải`});
+if(sd<sides&&cfg.sideRest>0)st.push({t:'side',d:cfg.sideRest,e,s:si+1,sd,label:'Đổi bên',say:`Xong bên trái. Nghỉ ${cfg.sideRest} giây, đổi sang bên phải`});
 }
+if(si<S.length-1&&cfg.setRest>0)st.push({t:'setrest',d:cfg.setRest,e,s:si+1,label:'Nghỉ giữa hiệp',say:`Xong hiệp ${si+1}. Nghỉ ${cfg.setRest} giây. Hiệp tiếp theo ${S[si+1]} cái${cfg.swap?' mỗi bên, bắt đầu bên trái':''}`});
+});
 if(e<cfg.ex&&cfg.switchRest>0)st.push({t:'switch',d:cfg.switchRest,e,label:'Chuyển bài',say:`Xong ${nameOf(e)}. Nghỉ ${cfg.switchRest} giây, chuyển sang ${nameOf(e+1)}`});
 }
 return st;
@@ -252,7 +262,7 @@ const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsW
 speechSynthesis.cancel();speechSynthesis.speak(u);
 }
 function cueStart(s){
-if(s.t==='hold'){beep(1000,.35);say('Bắt đầu')}
+if(s.t==='hold'){beep(1000,.35);say(cfg.swap&&s.sd&&s.r===1?SIDE[s.sd]+', bắt đầu':'Bắt đầu')}
 else if(s.t==='prep'){beep(600,.15);say('Chuẩn bị')}
 else if(s.t==='rest'){beep(500,.25);say('Nghỉ')}
 else{beep(500,.25);say(s.say)}
@@ -263,10 +273,10 @@ idx=i;const s=steps[i];rem=s.d;lastSec=-1;halfSaid=false;
 const c=COL[s.t];
 $('run').style.background=`linear-gradient(135deg,${c[0]},${c[1]})`;$('rPlay').style.color=c[1];
 $('rTitle').textContent=TITLE[s.t];$('rPhase').textContent=TITLE[s.t];
-const ex=s.t==='switch'?s.e+1:s.e,st=s.t==='switch'||s.t==='side'?1:s.t==='setrest'?s.s+1:s.s,sl=cfg.swap&&s.sd?' · '+SIDE[s.sd]:'';
+const ex=s.t==='switch'?s.e+1:s.e,st=s.t==='switch'?1:s.t==='setrest'?s.s+1:s.s,sl=cfg.swap&&s.sd?' · '+SIDE[s.sd]:'';
 const S=getSets();
 dots($('rEx'),cfg.ex,ex);dots($('rSet'),S.length,st);$('rName').textContent=nameOf(ex);
-$('rSub').textContent=s.t==='prep'?'Sẵn sàng nào':s.t==='hold'?`Cái ${s.r}/${s.n}${sl}`:s.t==='rest'?`Cái tiếp theo: ${s.r+1}/${s.n}${sl}`:s.t==='side'?`Tiếp theo: ${SIDE[2].toLowerCase()}`:`Hiệp ${st}: ${S[st-1]} cái${sl}`;
+$('rSub').textContent=s.t==='prep'?'Sẵn sàng nào':s.t==='hold'?`Cái ${s.r}/${s.n}${sl}`:s.t==='rest'?`Cái tiếp theo: ${s.r+1}/${s.n}${sl}`:s.t==='side'?`Tiếp theo: ${SIDE[2].toLowerCase()}`:`Hiệp ${st}: ${S[st-1]} cái${s.t==='setrest'&&cfg.swap?' mỗi bên · '+SIDE[1]:sl}`;
 upd();
 cueStart(s);
 }
@@ -361,9 +371,9 @@ const vEx=()=>`<p>McGill Big 3 gồm 3 bài, tương ứng Bài 1, 2, 3 trong �
 <div class="it"><b>1. Curl-Up (gập bụng cải tiến)</b><img class="ill" src="curlup.gif" alt="Ảnh động Curl-Up" loading="lazy" onerror="this.outerHTML=IMG.curl"><ul><li>Nằm ngửa, một chân co, chân kia duỗi thẳng. Hai tay đặt dưới thắt lưng để giữ độ cong tự nhiên của lưng.</li><li>Nâng nhẹ đầu và vai lên chỉ vài xăng-ti-mét, giữ cổ và ngực thành một khối, mắt nhìn lên trần.</li><li>Giữ, thở đều rồi hạ xuống. Đổi chân co ở hiệp khác.</li><li>Lỗi hay gặp: cuộn lưng, kéo cổ bằng tay, nín thở, ép lưng xuống sàn.</li></ul></div>
 <div class="it"><b>2. Side Plank (chống nghiêng)</b><img class="ill" src="sideplank.gif" alt="Ảnh động Side Plank" loading="lazy" onerror="this.outerHTML=IMG.side"><ul><li>Nằm nghiêng, khuỷu tay ngay dưới vai, cẳng tay vuông góc với thân.</li><li>Dễ hơn: đầu gối chạm sàn. Khó hơn: duỗi thẳng chân, hai chân chồng lên nhau.</li><li>Nâng hông khỏi sàn để thân thẳng một đường. Tay còn lại đặt trước ngực.</li><li>Làm cả hai bên. Lỗi hay gặp: hông võng, xoay người ra trước hoặc ra sau, nhún vai.</li></ul></div>
 <div class="it"><b>3. Bird-Dog (chó săn chim)</b><img class="ill" src="birddog.gif" alt="Ảnh động Bird-Dog" loading="lazy" onerror="this.outerHTML=IMG.bird"><ul><li>Quỳ bốn điểm, tay dưới vai, gối dưới hông, lưng giữ trung tính.</li><li>Duỗi một chân ra sau ngang hông và tay đối diện ra trước ngang vai, cố giữ hông và vai không xoay.</li><li>Giữ, hạ về rồi đổi bên. Lỗi hay gặp: ưỡn lưng, nâng chân tay quá cao, xoay hông.</li></ul></div>
-<p style="color:var(--mu);font-size:13px">Ảnh động minh họa từng bài: nâng lên, giữ, hạ xuống. Nét đỏ là phần cần chú ý (tay dưới lưng, hông nâng cao, tay và chân duỗi).</p><p>Mẹo trong ứng dụng: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật “Đổi chân / đổi bên” để ứng dụng tự chạy bên trái rồi bên phải cho mỗi bài. Đặt tên bài tại nút “✏️ Tên bài”.</p>
+<p style="color:var(--mu);font-size:13px">Ảnh động minh họa từng bài: nâng lên, giữ, hạ xuống. Nét đỏ là phần cần chú ý (tay dưới lưng, hông nâng cao, tay và chân duỗi).</p><p>Mẹo trong ứng dụng: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật “Đổi chân / đổi bên” để ứng dụng tự chạy bên trái rồi bên phải trong từng hiệp. Đặt tên bài tại nút “✏️ Tên bài”.</p>
 <p style="color:var(--mu);font-size:13px">Thông tin chỉ mang tính tham khảo, không thay thế tư vấn y tế. Nếu đang đau lưng nặng, tê hoặc yếu chân, hãy hỏi bác sĩ hoặc chuyên gia vật lý trị liệu trước khi tập.</p>`;
-const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi bài chạy bên trái, nghỉ đổi bên rồi chạy bên phải; tắt thì chỉ chạy một bên.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
+const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
 function vPre(){
 return allP().map((p,i)=>`<div class="it"><b>${esc(p.n)}</b><small>${p.c.ex} bài × ${p.c.nSets} hiệp · ${p.c.first} cái, giảm ${p.c.dec}/hiệp · giữ ${p.c.hold} giây · nghỉ ${p.c.rest} giây · ${p.c.swap?'đổi bên':'một bên'}</small><button class="btn p" data-a="pre" data-i="${i}">Dùng</button>${p.b?'':`<button class="btn" data-a="pdel" data-i="${i-PR.length}">Xóa</button>`}</div>`).join('')+`<button class="btn p" data-a="psave">＋ Lưu cấu hình hiện tại</button>`;
 }
@@ -439,6 +449,9 @@ render();mrender();alert('Đã nhập dữ liệu sao lưu.');
 r.readAsText(f);
 };
 $('menu').onclick=openMenu;
+['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
+document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
 if('speechSynthesis' in window)speechSynthesis.getVoices();
 render();
 let hw=0;try{hw=+localStorage.getItem('hideWel')||0}catch(e){}
