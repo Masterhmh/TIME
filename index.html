@@ -4,11 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Đồng hồ bấm giờ</title>
-<link rel="apple-touch-icon" href="/icon.png">
-<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Bấm giờ">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4364f">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html,body{-webkit-text-size-adjust:100%;touch-action:pan-x pan-y}
@@ -56,7 +58,7 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 60px 0;font-size:2
 #run{display:none;position:fixed;inset:0;z-index:9;flex-direction:column;align-items:center;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 16px) 14px calc(env(safe-area-inset-bottom,0px) + 20px);overflow-y:auto;transition:background .4s}
 #rTitle{font-size:24px;font-weight:700;margin-bottom:clamp(8px,2.4dvh,22px)}
 .pan{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;border:2px solid rgba(255,255,255,.25);border-radius:26px;padding:0 20px;height:78px;height:clamp(52px,8dvh,78px);flex:none;margin-bottom:10px;font-size:20px;font-weight:600}
-.dots{display:flex;gap:10px}.dots i{width:19px;height:19px;border-radius:50%;background:rgba(0,0,0,.15)}.dots i.on{background:#fff}
+.dots{display:flex;gap:12px;align-items:center}.dots i{font-style:normal;font-size:22px;font-weight:600;min-width:20px;text-align:center;color:#fff;opacity:.35;transition:opacity .3s,transform .3s}.dots i.on{opacity:1;font-weight:800;transform:scale(1.2)}
 .ringw{position:relative;flex:none;width:min(80vw,380px);width:clamp(180px,min(80vw,380px,calc(100dvh - 530px)),380px);aspect-ratio:1;margin:auto;container-type:inline-size}
 .ringw svg{width:100%;height:100%;transform:rotate(-90deg)}
 .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -70,6 +72,29 @@ h1{margin:0;padding:calc(env(safe-area-inset-top,0px) + 22px) 60px 0;font-size:2
 #rPlay{width:104px;height:104px;width:clamp(84px,13dvh,116px);height:clamp(84px,13dvh,116px);border-radius:50%;border:0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
 #rPlay svg{width:46px;height:46px;fill:currentColor}
 #rSkip{width:70px;height:70px;border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}
+#done{display:none;position:fixed;inset:0;z-index:20;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:24px;
+background:radial-gradient(circle at 50% 35%,#34d399,#0ea5e9 70%,#6366f1);animation:dfade .5s ease both}
+#cf{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.medal{width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;
+position:relative;animation:dpop .7s cubic-bezier(.2,1.6,.4,1) .15s both}
+.medal::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:3px solid rgba(255,255,255,.5);animation:dpulse 1.8s ease-out .8s infinite}
+.medal svg{width:84px;height:84px}
+.medal path{stroke-dasharray:60;stroke-dashoffset:60;animation:dcheck .6s ease .75s forwards}
+#done h2{font-size:36px;font-weight:800;margin:28px 0 8px;letter-spacing:.5px;animation:dup .6s ease .5s both}
+#done p{margin:0;font-size:18px;opacity:.95;animation:dup .6s ease .7s both}
+#dStats{display:flex;gap:12px;margin:26px 0 34px;animation:dup .6s ease .9s both}
+#dStats div{background:rgba(255,255,255,.2);border-radius:18px;padding:12px 18px;min-width:84px}
+#dStats b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+#dStats span{font-size:13px;opacity:.9}
+#dDone{border:0;border-radius:30px;background:#fff;color:#0ea5e9;font-size:18px;font-weight:700;padding:16px 56px;cursor:pointer;animation:dup .6s ease 1.1s both;position:relative}
+@keyframes dfade{from{opacity:0}to{opacity:1}}
+@keyframes dpop{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes dcheck{to{stroke-dashoffset:0}}
+@keyframes dpulse{from{transform:scale(.9);opacity:1}to{transform:scale(1.35);opacity:0}}
+@keyframes dup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#done,#done *,.medal::before{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+#rPrev{width:56px;height:56px;border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center}
+#wk{font-size:14px;opacity:.9;margin-top:4px;min-height:20px}
 /* Popup / menu */
 .ov{display:none;overscroll-behavior:contain;position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}
 .box{background:var(--bg);color:var(--tx);width:100%;max-width:480px;height:84vh;height:84dvh;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 20px);border-radius:28px 28px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 30px rgba(0,0,0,.25);animation:up .24s ease-out}
@@ -115,6 +140,7 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <div id="label">Tổng thời gian</div>
 <div id="time">00:00</div>
 <div id="info"></div>
+<div id="wk"></div>
 <div id="prog"></div>
 </div>
 <div class="sheet" id="sheet">
@@ -137,8 +163,17 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 </div>
 <div id="rName"></div><div id="rSub"></div>
 <div class="ctl"><button class="c" id="rCancel">HỦY</button>
+<button id="rPrev" aria-label="Quay lại"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M18 5L8 12l10 7z"/><path d="M5 5v14"/></svg></button>
 <button id="rPlay"><svg viewBox="0 0 24 24" id="rpi"><path d="M7 4l14 8-14 8z"/></svg></button>
 <button id="rSkip"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M6 5l10 7-10 7z"/><path d="M19 5v14"/></svg></button></div>
+</div>
+<div id="done">
+<canvas id="cf"></canvas>
+<div class="medal"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 33l12 12 21-24"/></svg></div>
+<h2>HOÀN THÀNH!</h2>
+<p>Tuyệt vời, bạn đã hoàn thành buổi tập 💪</p>
+<div id="dStats"></div>
+<button id="dDone">XONG</button>
 </div>
 <div class="ov" id="ov"><div class="box">
 <div class="mh"><span id="mtl"></span><button data-a="close" aria-label="Đóng">✕</button></div>
@@ -147,7 +182,7 @@ img.ill{max-height:none;height:auto;border-radius:12px}
 <input type="file" id="file" accept=".json,application/json" hidden>
 <script>
 const $=id=>document.getElementById(id);
-const DEF={prep:5,hold:10,rest:3,ex:3,nSets:3,first:5,dec:2,setRest:15,switchRest:30,swap:1,sideRest:10,snd:'beep',theme:'auto',names:['Curl-Up','Side Plank','Bird-Dog']};
+const DEF={prep:5,hold:10,rest:3,ex:3,nSets:3,first:5,dec:2,setRest:15,switchRest:30,swap:1,sideRest:10,goal:5,vol:100,snd:'beep',theme:'auto',names:['Curl-Up','Side Plank','Bird-Dog']};
 let cfg={...DEF};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('cfg')||'{}'))}catch(e){}
 const getSets=(c=cfg)=>Array.from({length:c.nSets},(_,i)=>Math.max(1,c.first-c.dec*i));
@@ -178,7 +213,9 @@ const ROWS=[
 {k:'first',cls:'r4',ic:'loop',name:'Số cái ở hiệp đầu',sub:'Hiệp đầu tiên có bao nhiêu cái',step:1,min:1,fmt:v=>v},
 {k:'dec',cls:'r4',ic:'loop',name:'Giảm mỗi hiệp',sub:'0 = giữ nguyên các hiệp',step:1,min:0,fmt:v=>v},
 {k:'setRest',cls:'r5',ic:'clock',name:'Nghỉ giữa hiệp',sub:'Giây',step:1,min:0,fmt:fmt},
-{k:'switchRest',cls:'r6',ic:'clock',name:'Nghỉ chuyển bài',sub:'Giây',step:1,min:0,fmt:fmt}
+{k:'switchRest',cls:'r6',ic:'clock',name:'Nghỉ chuyển bài',sub:'Giây',step:1,min:0,fmt:fmt},
+{k:'goal',cls:'r3',ic:'bolt',name:'Mục tiêu tuần',sub:'Số buổi hoàn thành mỗi tuần (0 = tắt)',step:1,min:0,max:21,fmt:v=>v?v+' buổi':'Tắt'},
+{k:'vol',cls:'r1',ic:'bolt',name:'Âm lượng',sub:'Âm báo và giọng nói',step:10,min:0,max:100,fmt:v=>v+'%'}
 ];
 const SND=[['beep','Âm báo'],['voice','Giọng nói'],['both','Âm báo + giọng nói'],['off','Tắt']];
 const SNDS={beep:'Âm báo',voice:'Giọng nói',both:'Báo + nói',off:'Tắt'};
@@ -241,7 +278,10 @@ function showTotal(){
 const tot=build().reduce((a,s)=>a+s.d,0);
 $('time').textContent=fmt(tot);$('label').textContent='Tổng thời gian';
 $('top').className='top';$('info').textContent=cfg.ex+' bài × '+cfg.nSets+' hiệp ('+getSets().join('·')+')'+(cfg.swap?' · 2 bên':'');
+week();
 }
+function week(){const d=new Date(),ws=new Date(d.getFullYear(),d.getMonth(),d.getDate()-(d.getDay()+6)%7).getTime(),n=get('hist').filter(x=>x.ok&&x.t>=ws).length,g=cfg.goal;
+$('wk').textContent=g?`Tuần này: ${n}/${g} buổi${n>=g?' 🎉':''}`:'';$('prog').style.width=g?Math.min(100,n/g*100)+'%':'0'}
 /* Âm thanh */
 let ac=null;
 function initAudio(){
@@ -249,7 +289,7 @@ try{if(navigator.audioSession)navigator.audioSession.type='ambient'}catch(e){}
 try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state!=='running')ac.resume()}catch(e){}
 }
 function beep(f=880,d=.15,v=.35){
-if(!ac||!(cfg.snd==='beep'||cfg.snd==='both'))return;
+v*=cfg.vol/100;if(!ac||!(cfg.snd==='beep'||cfg.snd==='both'))return;
 const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime;
 o.frequency.value=f;o.connect(g);g.connect(ac.destination);
 g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+d);
@@ -257,7 +297,7 @@ o.start(t);o.stop(t+d+.02);
 }
 function say(t){
 if(!(cfg.snd==='voice'||cfg.snd==='both')||!t||!('speechSynthesis' in window))return;
-const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';u.rate=1.05;
+const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';u.rate=1.05;u.volume=cfg.vol/100;
 const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsWith('vi'));if(v)u.voice=v;
 speechSynthesis.cancel();speechSynthesis.speak(u);
 }
@@ -267,8 +307,17 @@ else if(s.t==='prep'){beep(600,.15);say('Chuẩn bị')}
 else if(s.t==='rest'){beep(500,.25);say('Nghỉ')}
 else{beep(500,.25);say(s.say)}
 }
-const dots=(el,n,c)=>{el.innerHTML=Array.from({length:n},(_,i)=>`<i class="${i<c?'on':''}"></i>`).join('')};
-function enter(i){
+const saveSess=()=>{try{localStorage.setItem('sess',JSON.stringify({idx,rem,doneTime,sessStart,t:Date.now()}))}catch(e){}};
+const clearSess=()=>{try{localStorage.removeItem('sess')}catch(e){}};
+function resume(){
+let d=null;try{d=JSON.parse(localStorage.getItem('sess')||'null')}catch(e){}
+if(!d||Date.now()-d.t>6*36e5){clearSess();return false}
+steps=build();
+if(!steps.length||d.idx>=steps.length||!confirm('Có buổi tập đang dở. Tiếp tục không?')){clearSess();return false}
+totalAll=steps.reduce((a,x)=>a+x.d,0);doneTime=d.doneTime;sessStart=d.sessStart;started=true;running=false;
+$('run').style.display='flex';enter(d.idx,true);rem=d.rem;upd();setIcon();saveSess();return true}
+const dots=(el,n,c)=>{el.innerHTML=Array.from({length:n},(_,i)=>`<i class="${i+1===c?'on':''}">${i+1}</i>`).join('')};
+function enter(i,q){
 idx=i;const s=steps[i];rem=s.d;lastSec=-1;halfSaid=false;
 const c=COL[s.t];
 $('run').style.background=`linear-gradient(135deg,${c[0]},${c[1]})`;$('rPlay').style.color=c[1];
@@ -278,7 +327,8 @@ const S=getSets();
 dots($('rEx'),cfg.ex,ex);dots($('rSet'),S.length,st);$('rName').textContent=nameOf(ex);
 $('rSub').textContent=s.t==='prep'?'Sẵn sàng nào':s.t==='hold'?`Cái ${s.r}/${s.n}${sl}`:s.t==='rest'?`Cái tiếp theo: ${s.r+1}/${s.n}${sl}`:s.t==='side'?`Tiếp theo: ${SIDE[2].toLowerCase()}`:`Hiệp ${st}: ${S[st-1]} cái${s.t==='setrest'&&cfg.swap?' mỗi bên · '+SIDE[1]:sl}`;
 upd();
-cueStart(s);
+if(!q)cueStart(s);
+saveSess();
 }
 function upd(){
 const s=steps[idx],r=Math.max(rem,0);
@@ -292,17 +342,16 @@ const s=steps[idx],sec=Math.ceil(rem);
 if(s.t==='hold'){
 if(!halfSaid&&rem<=s.d/2){halfSaid=true;if(s.d>=4){beep(800,.1);say('Một nửa')}}
 }else if(s.d>3&&sec!==lastSec&&sec>=1&&sec<=3){beep(700,.1);say(String(sec))}
+if(sec!==lastSec)saveSess();
 lastSec=sec;
 if(rem<=0){
-doneTime+=s.d;
-if(idx+1>=steps.length){finish();return}
-enter(idx+1);
+while(rem<=0){const c=steps[idx];doneTime+=c.d;if(idx+1>=steps.length){finish();return}const ov=-rem;enter(idx+1,ov>=steps[idx+1].d);rem-=ov}
 }else upd();
 requestAnimationFrame(tick);
 }
 function setIcon(){$('rpi').innerHTML=running?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M7 4l14 8-14 8z"/>'}
-async function wake(on){try{if(on){wl=await navigator.wakeLock.request('screen')}else if(wl){wl.release();wl=null}}catch(e){}}
-function close(){running=false;started=false;wake(false);$('run').style.display='none';showTotal()}
+async function wake(on){try{if(on){if(!wl||wl.released)wl=await navigator.wakeLock.request('screen')}else if(wl){wl.release();wl=null}}catch(e){}}
+function close(){clearSess();running=false;started=false;wake(false);$('run').style.display='none';showTotal()}
 /* Ghi lịch sử */
 function logSess(ok){
 const n=ok?steps.length:idx,dn=steps.slice(0,n).filter(s=>s.t==='hold'),h=dn.length;
@@ -311,7 +360,40 @@ if(!h)return;
 const nl=Array.from({length:cfg.ex},(_,i)=>nameOf(i+1));
 put('hist',[...get('hist'),{t:Date.now(),s0:sessStart,wt:Math.round((Date.now()-sessStart)/1000),el:Math.round(el),h,hd:cfg.hold,ex:cfg.ex,ns:cfg.nSets,ok:ok?1:0,nm:nl.join(', '),nl,ss:getSets(),sw:cfg.swap?1:0,h1:dn.filter(x=>x.sd===1).length,h2:dn.filter(x=>x.sd===2).length,pe:nl.map((_,i)=>dn.filter(x=>x.e===i+1).length),rt:{pr:cfg.prep,rs:cfg.rest,sr:cfg.setRest,sd:cfg.sideRest,sw:cfg.switchRest},sp:ok?null:{e:cur.e,s:cur.s,r:cur.r,sd:cur.sd}}]);
 }
-function finish(){running=false;logSess(true);beep(1000,.15);setTimeout(()=>beep(1000,.15),200);setTimeout(()=>beep(1300,.4),400);say('Hoàn thành buổi tập');close()}
+let cfRaf=0;
+function confetti(){
+cancelAnimationFrame(cfRaf);
+const cv=$('cf'),x=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=innerWidth,H=innerHeight;
+cv.width=W*dpr;cv.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+const cols=['#ff6b57','#fbbf24','#ffffff','#a78bfa','#f472b6','#facc15'],P=[],R=(a,b)=>a+Math.random()*(b-a);
+const mk=(px,py,vx,vy,i)=>P.push({x:px,y:py,vx,vy,w:R(6,11),h:R(8,16),r:R(0,6.28),vr:R(-.3,.3),c:cols[i%cols.length]});
+const shoot=(px,dir,n)=>{for(let i=0;i<n;i++)mk(px,H,dir*R(2,9),-R(12,20),i)};
+const t0=performance.now();let fired=false;
+shoot(0,1,70);shoot(W,-1,70);
+(function f(t){
+const el=t-t0;
+if(el>900&&!fired){fired=true;shoot(0,1,50);shoot(W,-1,50)}
+if(el<2500&&Math.random()<.5)mk(R(0,W),-10,R(-1.5,1.5),R(2,5),P.length);
+x.clearRect(0,0,W,H);
+for(let i=P.length-1;i>=0;i--){
+const p=P[i];p.vy+=.35;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+if(p.y>H+30){P.splice(i,1);continue}
+x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore();
+}
+if(P.length||el<2500)cfRaf=requestAnimationFrame(f);else x.clearRect(0,0,W,H);
+})(t0);
+}
+function finish(){
+running=false;logSess(true);clearSess();wake(false);
+[523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.18),i*180));setTimeout(()=>beep(1047,.6),540);
+say('Hoàn thành buổi tập. Tuyệt vời');
+try{navigator.vibrate&&navigator.vibrate([200,100,200,100,400])}catch(e){}
+const S=getSets();
+$('dStats').innerHTML=`<div><b>${fmt(totalAll)}</b><span>Thời gian</span></div><div><b>${cfg.ex}</b><span>Bài tập</span></div><div><b>${S.length}</b><span>Hiệp mỗi bài</span></div>`;
+$('done').style.display='flex';confetti();
+}
+$('dDone').onclick=()=>{cancelAnimationFrame(cfRaf);$('done').style.display='none';close()};
 $('play').onclick=()=>{
 initAudio();
 steps=build();if(!steps.length)return;
@@ -321,13 +403,15 @@ requestAnimationFrame(tick);
 };
 $('rPlay').onclick=()=>{
 initAudio();
-running=!running;setIcon();
+running=!running;setIcon();saveSess();
 if(running){last=performance.now();requestAnimationFrame(tick)}else if('speechSynthesis' in window)speechSynthesis.cancel();
 };
 $('rCancel').onclick=()=>{if('speechSynthesis' in window)speechSynthesis.cancel();logSess(false);close()};$('rSkip').onclick=()=>{
 doneTime+=steps[idx].d;
 if(idx+1>=steps.length)finish();else enter(idx+1);
 };
+$('rPrev').onclick=()=>{const s=steps[idx];last=performance.now();if(idx===0||s.d-rem>2)enter(idx);else{doneTime-=steps[idx-1].d;enter(idx-1)}};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&started&&running)wake(true)});
 /* Popup & menu */
 const mk=(first,dec,nSets,swap=1)=>({prep:5,hold:10,rest:3,ex:3,nSets,first,dec,setRest:15,switchRest:30,swap,sideRest:10,names:[...BIG3]});
 const PR=[
@@ -345,7 +429,7 @@ let isWel=false;
 const openOv=()=>{$('ov').style.display='flex';document.documentElement.classList.add('lock')};
 const closeOv=()=>{
 if(isWel){const c=$('nw');if(c&&c.checked)try{localStorage.setItem('hideWel',String(Date.now()))}catch(e){}isWel=false}
-$('ov').style.display='none';document.documentElement.classList.remove('lock');
+$('ov').style.display='none';document.documentElement.classList.remove('lock');if(!started)showTotal();
 };
 $('ov').addEventListener('touchmove',e=>{if(!e.target.closest('#mb'))e.preventDefault()},{passive:false});
 function welcome(){
@@ -385,7 +469,7 @@ return `<div class="it"><b>${x.s0?hhmm(x.s0)+'–':''}${hhmm(x.t)}</b> ${x.ok?'�
 `<small>${x.ex} bài × ${x.ns} hiệp${x.ss?' ('+x.ss.join('·')+' cái)':''}${x.sw===undefined?'':x.sw?' · đổi bên (trái '+x.h1+', phải '+x.h2+')':' · một bên'}</small>`+
 `<small>${nl&&x.pe?nl.map((n,i)=>esc(n)+' '+x.pe[i]).join(' · '):esc(x.nm||'')}</small>`+
 (r?`<small>Nghỉ: cái ${r.rs} giây · hiệp ${r.sr} giây · đổi bên ${r.sd} giây · chuyển bài ${r.sw} giây · chuẩn bị ${r.pr} giây</small>`:'')+
-(!x.ok&&sp&&sp.e?`<small>Dừng ở: ${nl?esc(nl[sp.e-1]||''):'bài '+sp.e}${sp.s?', hiệp '+sp.s:''}${sp.r?', cái '+sp.r:''}${x.sw&&sp.sd?(sp.sd===1?', bên trái':', bên phải'):''}</small>`:'')+'</div>'};
+(!x.ok&&sp&&sp.e?`<small>Dừng ở: ${nl?esc(nl[sp.e-1]||''):'bài '+sp.e}${sp.s?', hiệp '+sp.s:''}${sp.r?', cái '+sp.r:''}${x.sw&&sp.sd?(sp.sd===1?', bên trái':', bên phải'):''}</small>`:'')+`<button class="btn" data-a="sdel" data-t="${x.t}">🗑 Xóa buổi này</button></div>`};
 function vHist(){
 const h=get('hist'),days={};h.forEach(x=>{const k=dk(x.t);days[k]=(days[k]||0)+x.el});
 let s=0,d=new Date();if(!days[dk(d)])d.setDate(d.getDate()-1);
@@ -412,7 +496,9 @@ o+=nav(`Tháng ${hm+1}/${hy}`)+`<div class="cal">${c}</div><p>${l.length} buổi
 const ms=Array.from({length:12},(_,i)=>h.filter(x=>inM(x,hy+'-'+p2(i+1))).reduce((a,x)=>a+x.el,0)/60),mx=Math.max(...ms,1);
 o+=nav(`Năm ${hy}`)+`<div class="yr">`+ms.map((v,i)=>`<div data-a="mon" data-m="${i}">${v?Math.round(v):''}<span style="height:${v/mx*80}%"></span>${i+1}</div>`).join('')+`</div><p>Tổng: ${h.filter(x=>inM(x,hy+'-')).length} buổi · ${Math.round(ms.reduce((a,v)=>a+v,0))} phút (phút mỗi tháng). Bấm cột để xem tháng.</p>`;
 }
-return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">⬇ Xuất sao lưu</button><button class="btn" data-a="imp">⬆ Nhập sao lưu</button><button class="btn" data-a="clr">🗑 Xóa lịch sử</button><p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
+const lab=hv==='day'?'ngày '+hdk.split('-').reverse().join('/'):hv==='month'?`tháng ${hm+1}/${hy}`:`năm ${hy}`;
+const del=`<button class="btn" data-a="clr" data-s="${hv}">🗑 Xóa ${lab}</button><button class="btn" data-a="clr" data-s="all">🗑 Xóa tất cả</button>`;
+return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">⬇ Xuất sao lưu</button><button class="btn" data-a="imp">⬆ Nhập sao lưu</button><button class="btn" data-a="csv">⬇ Xuất CSV</button><br>${del}<p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
 }
 const syncYM=()=>{hy=+hdk.slice(0,4);hm=+hdk.slice(5,7)-1};
 $('ov').addEventListener('click',e=>{
@@ -432,9 +518,22 @@ else if(a==='mon'){hm=+D.m;hv='month';mrender()}
 else if(a==='pre'){const p=allP()[+D.i];Object.assign(cfg,p.c);cfg.names=p.c.names?[...p.c.names]:[];save();render();closeOv()}
 else if(a==='pdel'){const l=get('pre');l.splice(+D.i,1);put('pre',l);mrender()}
 else if(a==='psave'){const n=prompt('Tên mẫu tập');if(n&&n.trim()){const c={};PK.forEach(k=>c[k]=cfg[k]);c.names=[...(cfg.names||[])];put('pre',[...get('pre'),{n:n.trim(),c}]);mrender()}}
+else if(a==='sdel'){if(confirm('Xóa buổi tập này? Không thể hoàn tác.')){put('hist',get('hist').filter(x=>x.t!==+D.t));mrender()}}
+else if(a==='csv'){const q=v=>'"'+String(v).replace(/"/g,'""')+'"',h=get('hist');
+const R=[['Ngày','Bắt đầu','Kết thúc','Trạng thái','Số cái','Giây/cái','Thời gian tập (s)','Bài','Hiệp','Đổi bên','Chi tiết bài'],...h.map(x=>[dk(x.t),x.s0?hhmm(x.s0):'',hhmm(x.t),x.ok?'Hoàn thành':'Bỏ dở',x.h,x.hd,x.el,x.ex,x.ns,x.sw?'Có':'Không',x.nl&&x.pe?x.nl.map((n,i)=>n+' '+x.pe[i]).join('; '):(x.nm||'')])];
+const u=URL.createObjectURL(new Blob(['\ufeff'+R.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'})),l=document.createElement('a');l.href=u;l.download='lich-su-'+dk(Date.now())+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
 else if(a==='exp'){const u=URL.createObjectURL(new Blob([JSON.stringify({v:1,cfg,hist:get('hist'),pre:get('pre')})],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download='time-backup-'+dk(Date.now())+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
 else if(a==='imp')$('file').click();
-else if(a==='clr'){if(confirm('Xóa toàn bộ lịch sử tập luyện? Không thể hoàn tác.')){put('hist',[]);mrender()}}
+else if(a==='clr'){
+const sc=D.s,h=get('hist');
+let pre='',lab='toàn bộ lịch sử tập luyện';
+if(sc==='day'){pre=hdk;lab='lịch sử ngày '+hdk.split('-').reverse().join('/')}
+else if(sc==='month'){pre=hy+'-'+p2(hm+1);lab=`lịch sử tháng ${hm+1}/${hy}`}
+else if(sc==='year'){pre=hy+'-';lab='lịch sử năm '+hy}
+const hit=h.filter(x=>dk(x.t).startsWith(pre));
+if(!hit.length){alert('Không có buổi tập nào để xóa.');return}
+if(confirm(`Xóa ${lab} (${hit.length} buổi tập)? Không thể hoàn tác.`)){put('hist',h.filter(x=>!dk(x.t).startsWith(pre)));mrender()}
+}
 });
 $('file').onchange=e=>{
 const f=e.target.files[0];e.target.value='';if(!f)return;
@@ -456,7 +555,8 @@ if('speechSynthesis' in window)speechSynthesis.getVoices();
 render();
 let hw=0;try{hw=+localStorage.getItem('hideWel')||0}catch(e){}
 const hwD=new Date(hw),nwD=new Date();
-if(!hw||nwD.getFullYear()*12+nwD.getMonth()>hwD.getFullYear()*12+hwD.getMonth())welcome();
+if(!resume()&&(!hw||nwD.getFullYear()*12+nwD.getMonth()>hwD.getFullYear()*12+hwD.getMonth()))welcome();
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
