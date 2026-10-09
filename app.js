@@ -13,6 +13,8 @@ const dk=d=>{const x=new Date(d);return x.getFullYear()+'-'+p2(x.getMonth()+1)+'
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const BIG3=['Curl-Up','Side Plank','Bird-Dog'];
 const nameOf=e=>((cfg.names||[])[e-1]||'').trim()||BIG3[e-1]||'Bài tập '+e;
+const SAYNAME={'curl-up':'gập bụng','curl up':'gập bụng','side plank':'chống nghiêng','side-plank':'chống nghiêng','bird-dog':'chó săn','bird dog':'chó săn',plank:'plank',squat:'squat','push-up':'chống đẩy','push up':'chống đẩy','pull-up':'kéo xà đơn','pull up':'kéo xà đơn',lunge:'chùng chân',crunch:'gập bụng','sit-up':'gập bụng','sit up':'gập bụng',deadlift:'deadlift',burpee:'burpee','mountain climber':'leo núi','jumping jack':'nhảy dang tay','high knees':'nâng cao gối','glute bridge':'nâng hông','leg raise':'nâng chân',superman:'siêu nhân'};
+const speakNameOf=e=>{const c=(cfg.snames||[])[e-1];if(c&&c.trim())return c.trim();const k=nameOf(e).toLowerCase().trim();return SAYNAME[k]||nameOf(e)};
 const ICONS={
 play:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><path class="g" d="M12.5 9.5v13l10.5-6.5z"/></svg>',
 pause:'<svg class="ic" viewBox="0 0 32 32"><rect width="32" height="32" rx="10" fill="currentColor"/><rect class="g" x="10.5" y="9.5" width="4" height="13" rx="1.4"/><rect class="g" x="17.5" y="9.5" width="4" height="13" rx="1.4"/></svg>',
@@ -74,7 +76,7 @@ save();render();
 });
 $('voice').onclick=()=>{const i=SND.findIndex(x=>x[0]===cfg.snd);cfg.snd=SND[(i+1)%SND.length][0];if('speechSynthesis' in window)speechSynthesis.cancel();save();render()};
 $('theme').onclick=()=>{const i=THM.findIndex(x=>x[0]===cfg.theme);cfg.theme=THM[(i+1)%3][0];save();render()};
-$('names').onclick=()=>{const n=[...(cfg.names||[])];for(let i=1;i<=cfg.ex;i++){const s=prompt('Tên bài '+i+' (để trống = tên mặc định)',n[i-1]||nameOf(i));if(s===null)break;n[i-1]=s.trim()}cfg.names=n;save();render()};
+$('names').onclick=()=>{const n=[...(cfg.names||[])],sn=[...(cfg.snames||[])];for(let i=1;i<=cfg.ex;i++){const s=prompt('Tên bài '+i+' (để trống = tên mặc định)',n[i-1]||nameOf(i));if(s===null)break;n[i-1]=s.trim();const sug=sn[i-1]||SAYNAME[n[i-1].toLowerCase()]||'';const t=prompt('Tên đọc của bài '+i+' (giọng đọc sẽ đọc tên này, để trống = tự đoán)',sug);if(t===null)break;sn[i-1]=t.trim()}cfg.names=n;cfg.snames=sn;save();render()};
 /* Timeline */
 function build(){
 const st=[],S=getSets(),sides=cfg.swap?2:1;
@@ -90,7 +92,7 @@ if(sd<sides&&cfg.sideRest>0)st.push({t:'side',d:cfg.sideRest,e,s:si+1,sd,label:'
 }
 if(si<S.length-1&&cfg.setRest>0)st.push({t:'setrest',d:cfg.setRest,e,s:si+1,label:'Nghỉ giữa hiệp',say:`Xong hiệp ${si+1}. Nghỉ ${cfg.setRest} giây. Hiệp tiếp theo ${S[si+1]} cái${cfg.swap?' mỗi bên, bắt đầu bên trái':''}`});
 });
-if(e<cfg.ex&&cfg.switchRest>0)st.push({t:'switch',d:cfg.switchRest,e,label:'Chuyển bài',say:`Xong ${nameOf(e)}. Nghỉ ${cfg.switchRest} giây, chuyển sang ${nameOf(e+1)}`});
+if(e<cfg.ex&&cfg.switchRest>0)st.push({t:'switch',d:cfg.switchRest,e,label:'Chuyển bài',say:`Xong ${speakNameOf(e)}. Nghỉ ${cfg.switchRest} giây, chuyển sang ${speakNameOf(e+1)}`});
 }
 return st;
 }
