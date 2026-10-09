@@ -147,7 +147,7 @@ const vs=speechSynthesis.getVoices(),want=uri!==undefined?uri:cfg.voice,v=(want&
 speechSynthesis.cancel();speechSynthesis.speak(u);
 }
 function cueStart(s){
-if(s.t==='hold'){beep(1000,.35);say(cfg.swap&&s.sd&&s.r===1?SIDE[s.sd]+', bắt đầu':'Bắt đầu')}
+if(s.t==='hold'){beep(1000,.35);const fe=s.r===1&&s.s===1&&s.sd===1;say((fe?speakNameOf(s.e)+'. ':'')+(cfg.swap&&s.sd&&s.r===1?SIDE[s.sd]+', bắt đầu':'Bắt đầu'))}
 else if(s.t==='prep'){beep(600,.15);say('Chuẩn bị')}
 else if(s.t==='rest'){beep(500,.25);say('Nghỉ')}
 else{beep(500,.25);say(s.say)}
@@ -378,7 +378,7 @@ const keys=Object.keys(days).sort();let lg=0,run=0,pv=null;
 keys.forEach(k=>{const q=k.split('-'),n=Date.UTC(+q[0],+q[1]-1,+q[2])/864e5;run=pv!==null&&n-pv===1?run+1:1;pv=n;lg=Math.max(lg,run)});
 const inM=(x,p)=>dk(x.t).startsWith(p),sum=l=>l.reduce((a,x)=>a+x.el,0);
 const best=h.reduce((a,x)=>Math.max(a,x.h?x.hd:0),0);
-let o=`<div class="st"><div><b>${s}</b>ngày liên tiếp</div><div><b>${Math.max(lg,s)}</b>chuỗi dài nhất</div><div><b>${keys.length}</b>ngày đã tập</div><div><b>${Math.round(sum(h.filter(x=>inM(x,dk(Date.now()).slice(0,7))))/60)}</b>phút tháng này</div><div><b>${best} giây</b>giữ lâu nhất</div><div><b>${h.length}</b>buổi tập</div></div>`;
+let o=`<div class="st"><div><b>${s}</b>ngày liên tiếp</div><div><b>${Math.max(lg,s)}</b>chuỗi dài nhất</div><div><b>${keys.length}</b>ngày đã tập</div><div><b>${fmt(sum(h.filter(x=>inM(x,dk(Date.now()).slice(0,7)))))}</b>tổng tháng này</div><div><b>${best} giây</b>giữ lâu nhất</div><div><b>${h.length}</b>buổi tập</div></div>`;
 o+=[['day','Ngày'],['week','Tuần'],['month','Tháng'],['year','Năm']].map(([k,n])=>`<button class="tb${k===hv?' on':''}" data-a="hv" data-v="${k}" style="margin-right:6px">${n}</button>`).join('');
 const nav=t=>`<div class="nav"><button class="btn" data-a="nav" data-n="-1">◀</button>${t}<button class="btn" data-a="nav" data-n="1">▶</button></div>`;
 if(hv==='day'){
@@ -387,17 +387,17 @@ o+=nav(`${dd}/${m}/${y}`);
 o+=l.length?l.map(card).join('')+`<p>Tổng: ${l.length} buổi · ${fmt(sum(l))}</p>`:'<p>Chưa có buổi tập nào trong ngày này.</p>';
 }else if(hv==='week'){
 const ds=Array.from({length:7},(_,i)=>new Date(addD(hwk,i)+'T00:00')),ms=ds.map(d=>(days[dk(d)]||0)/60),mx=Math.max(...ms,1),l=h.filter(x=>{const k=dk(x.t);return k>=hwk&&k<=addD(hwk,6)}),nm=['T2','T3','T4','T5','T6','T7','CN'];
-o+=nav(`${fd(ds[0])} – ${fd(ds[6])}`)+`<div class="yr">`+ds.map((d,i)=>`<div data-a="day" data-d="${dk(d)}">${ms[i]?Math.round(ms[i]):''}<span style="height:${ms[i]/mx*80}%"></span>${nm[i]}</div>`).join('')+`</div><p>${l.length} buổi · ${new Set(l.map(x=>dk(x.t))).size} ngày tập · ${Math.round(sum(l)/60)} phút (phút mỗi ngày).${cfg.goal?` Mục tiêu: ${l.filter(x=>x.ok).length}/${cfg.goal} buổi hoàn thành.`:''} Bấm cột để xem ngày.</p>`;
+o+=nav(`${fd(ds[0])} – ${fd(ds[6])}`)+`<div class="yr">`+ds.map((d,i)=>`<div data-a="day" data-d="${dk(d)}">${ms[i]?Math.round(ms[i]):''}<span style="height:${ms[i]/mx*80}%"></span>${nm[i]}</div>`).join('')+`</div><p>${l.length} buổi · ${new Set(l.map(x=>dk(x.t))).size} ngày tập · ${fmt(sum(l))} (phút mỗi ngày).${cfg.goal?` Mục tiêu: ${l.filter(x=>x.ok).length}/${cfg.goal} buổi hoàn thành.`:''} Bấm cột để xem ngày.</p>`;
 }else if(hv==='month'){
 const pre=hy+'-'+p2(hm+1),dim=new Date(hy,hm+1,0).getDate(),off=(new Date(hy,hm,1).getDay()+6)%7,td=dk(Date.now());
 let c=['T2','T3','T4','T5','T6','T7','CN'].map(x=>`<i>${x}</i>`).join('')+'<b class="n"></b>'.repeat(off);
 for(let i=1;i<=dim;i++){const k=pre+'-'+p2(i),mn=(days[k]||0)/60,a=Math.min(.95,.25+mn/40);
 c+=`<b data-a="day" data-d="${k}" class="${k===td?'t':''}"${mn?` style="background:rgba(244,54,79,${a});color:${a>.55?'#fff':'inherit'}"`:''}>${i}</b>`}
 const l=h.filter(x=>inM(x,pre));
-o+=nav(`Tháng ${hm+1}/${hy}`)+`<div class="cal">${c}</div><p>${l.length} buổi · ${new Set(l.map(x=>dk(x.t))).size} ngày tập · ${Math.round(sum(l)/60)} phút. Bấm vào ngày để xem chi tiết.</p>`;
+o+=nav(`Tháng ${hm+1}/${hy}`)+`<div class="cal">${c}</div><p>${l.length} buổi · ${new Set(l.map(x=>dk(x.t))).size} ngày tập · ${fmt(sum(l))}. Bấm vào ngày để xem chi tiết.</p>`;
 }else{
 const ms=Array.from({length:12},(_,i)=>h.filter(x=>inM(x,hy+'-'+p2(i+1))).reduce((a,x)=>a+x.el,0)/60),mx=Math.max(...ms,1);
-o+=nav(`Năm ${hy}`)+`<div class="yr">`+ms.map((v,i)=>`<div data-a="mon" data-m="${i}">${v?Math.round(v):''}<span style="height:${v/mx*80}%"></span>${i+1}</div>`).join('')+`</div><p>Tổng: ${h.filter(x=>inM(x,hy+'-')).length} buổi · ${Math.round(ms.reduce((a,v)=>a+v,0))} phút (phút mỗi tháng). Bấm cột để xem tháng.</p>`;
+o+=nav(`Năm ${hy}`)+`<div class="yr">`+ms.map((v,i)=>`<div data-a="mon" data-m="${i}">${v?Math.round(v):''}<span style="height:${v/mx*80}%"></span>${i+1}</div>`).join('')+`</div><p>Tổng: ${h.filter(x=>inM(x,hy+'-')).length} buổi · ${fmt(ms.reduce((a,v)=>a+v,0)*60)} (phút mỗi tháng). Bấm cột để xem tháng.</p>`;
 }
 const lab=hv==='day'?'ngày '+hdk.split('-').reverse().join('/'):hv==='week'?'tuần '+fd(new Date(hwk+'T00:00'))+'–'+fd(new Date(addD(hwk,6)+'T00:00')):hv==='month'?`tháng ${hm+1}/${hy}`:`năm ${hy}`;
 const del=`<button class="btn" data-a="clr" data-s="${hv}">${I('trash')} Xóa ${lab}</button><button class="btn" data-a="clr" data-s="all">${I('trash')} Xóa tất cả</button>`;
