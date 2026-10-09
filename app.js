@@ -1,6 +1,6 @@
 
 const $=id=>document.getElementById(id);
-const DEF={prep:5,hold:10,rest:3,ex:3,nSets:3,first:5,dec:2,setRest:15,switchRest:30,swap:1,sideRest:10,goal:5,vol:100,voice:'',autolock:0,snd:'beep',theme:'auto',names:['Curl-Up','Side Plank','Bird-Dog']};
+const DEF={prep:5,hold:10,rest:3,ex:3,nSets:3,first:5,dec:2,setRest:15,switchRest:30,swap:1,sideRest:10,goal:5,vol:100,voice:'',autolock:1,snd:'beep',theme:'auto',names:['Curl-Up','Side Plank','Bird-Dog']};
 let cfg={...DEF};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('cfg')||'{}'))}catch(e){}
 const getSets=(c=cfg)=>Array.from({length:c.nSets},(_,i)=>Math.max(1,c.first-c.dec*i));
@@ -33,6 +33,7 @@ const ROWS=[
 {k:'rest',cls:'r2',ic:'pause',name:'Nghỉ ngơi',sub:'Nghỉ giữa các cái (giây)',step:1,min:0,fmt:fmt},
 {k:'ex',cls:'r3',ic:'bolt',name:'Bài tập',sub:'Số bài',step:1,min:1,fmt:v=>v},
 {k:'swap',cls:'r5',ic:'loop',name:'Đổi chân / đổi bên',sub:'Bật: mỗi hiệp làm bên trái rồi bên phải',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'},
+{k:'autolock',cls:'r6',ic:'lockr',name:'Khóa cảm ứng',sub:'Tự khóa màn hình khi bấm bắt đầu',step:1,min:0,max:1,fmt:v=>v?'Bật':'Tắt'},
 {k:'sideRest',cls:'r5',ic:'clock',name:'Nghỉ đổi bên',sub:'Giây (giữa trái và phải)',step:1,min:0,fmt:fmt,need:'swap'},
 {k:'nSets',cls:'r4',ic:'loop',name:'Số hiệp',sub:'Số hiệp mỗi bài',step:1,min:1,fmt:v=>v},
 {k:'first',cls:'r4',ic:'loop',name:'Số cái ở hiệp đầu',sub:'Hiệp đầu tiên có bao nhiêu cái',step:1,min:1,fmt:v=>v},
@@ -246,7 +247,7 @@ $('play').onclick=()=>{
 initAudio();
 steps=build();if(!steps.length)return;
 totalAll=steps.reduce((a,s)=>a+s.d,0);doneTime=0;started=true;running=true;sessStart=Date.now();
-$('run').style.display='flex';last=performance.now();enter(0);setIcon();wake(true);lock(true);
+$('run').style.display='flex';last=performance.now();enter(0);setIcon();wake(true);if(cfg.autolock)lock(true);
 requestAnimationFrame(tick);
 };
 $('rPlay').onclick=()=>{
@@ -357,7 +358,7 @@ const vEx=()=>`<p>McGill Big 3 gồm 3 bài, tương ứng Bài 1, 2, 3 trong �
 <div class="it"><b>3. Bird-Dog (chó săn chim)</b><img class="ill" src="${IMG_BIRDDOG}" alt="Hình minh họa Bird-Dog" loading="lazy" onerror="this.outerHTML=IMG.bird"><ul><li>Quỳ bốn điểm, tay dưới vai, gối dưới hông, lưng giữ trung tính.</li><li>Duỗi một chân ra sau ngang hông và tay đối diện ra trước ngang vai, cố giữ hông và vai không xoay.</li><li>Giữ, hạ về rồi đổi bên. Lỗi hay gặp: ưỡn lưng, nâng chân tay quá cao, xoay hông.</li></ul></div>
 <p style="color:var(--mu);font-size:13px">Hình động minh họa từng bài: nâng lên, giữ, hạ xuống. Vùng đỏ là nhóm cơ đang làm việc, chữ đỏ là điểm cần chú ý. Mỗi vòng gồm nâng lên, giữ (thanh tiến độ ở góc phải), hạ xuống.</p><p>Mẹo trong ứng dụng: cả 3 bài đều nên làm hai bên (Curl-Up thì đổi chân co). Bật “Đổi chân / đổi bên” để ứng dụng tự chạy bên trái rồi bên phải trong từng hiệp. Đặt tên bài tại nút “Tên bài”.</p>
 <p style="color:var(--mu);font-size:13px">Thông tin chỉ mang tính tham khảo, không thay thế tư vấn y tế. Nếu đang đau lưng nặng, tê hoặc yếu chân, hãy hỏi bác sĩ hoặc chuyên gia vật lý trị liệu trước khi tập.</p>`;
-const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Khi bấm bắt đầu, cảm ứng tự động khóa để khỏi bấm nhầm; muốn mở thì chạm vào nút hình ổ khóa ở góc phải. Có thể khóa lại bằng nút ổ khóa đó.</li><li>“Giọng đọc”: chọn giọng tiếng Việt có sẵn trên máy và nghe thử.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
+const vGuide=()=>`<p><b>Cách dùng ứng dụng</b></p><ul><li>Bấm + / − để đổi thông số, bấm vào số để nhập trực tiếp.</li><li>Bấm nút tròn lớn để bắt đầu; trong lúc tập có thể tạm dừng hoặc bỏ qua bước.</li><li>“Tên bài” để đặt tên từng bài; “Mẫu tập” để lưu và dùng lại cấu hình giờ.</li><li>“Đổi chân / đổi bên”: bật thì mỗi hiệp chạy bên trái, nghỉ đổi bên rồi chạy bên phải, sau đó mới nghỉ giữa hiệp; tắt thì chỉ chạy một bên.</li><li>Nếu bật “Khóa cảm ứng”, khi bấm bắt đầu màn hình sẽ tự khóa để khỏi bấm nhầm; muốn mở thì chạm vào nút hình ổ khóa ở góc phải. Có thể khóa lại bằng nút ổ khóa đó.</li><li>“Giọng đọc”: chọn giọng tiếng Việt có sẵn trên máy và nghe thử.</li><li>Buổi tập tự ghi vào Lịch sử khi hoàn thành (hoặc khi hủy giữa chừng nếu đã giữ ít nhất 1 cái).</li></ul><p><b>Nguyên tắc tập luyện</b></p><ul><li>Khởi động 3–5 phút trước khi tập.</li><li>Giữ đúng tư thế, thở đều, không nín thở.</li><li>Tăng dần: thêm vài giây giữ hoặc thêm hiệp mỗi tuần, không tăng đột ngột.</li><li>Nghỉ đủ giữa các hiệp; ngủ đủ để cơ hồi phục.</li><li>Tập đều đặn quan trọng hơn tập quá sức; dùng chuỗi ngày liên tiếp để giữ nhịp.</li><li>Đau nhói, chóng mặt hoặc khó thở: dừng ngay. Nếu có bệnh lý, hỏi bác sĩ trước khi tập.</li></ul>`;
 function vPre(){
 return allP().map((p,i)=>`<div class="it"><b>${esc(p.n)}</b><small>${p.c.ex} bài × ${p.c.nSets} hiệp · ${p.c.first} cái, giảm ${p.c.dec}/hiệp · giữ ${p.c.hold} giây · nghỉ ${p.c.rest} giây · ${p.c.swap?'đổi bên':'một bên'}</small><button class="btn p" data-a="pre" data-i="${i}">Dùng</button>${p.b?'':`<button class="btn" data-a="pdel" data-i="${i-PR.length}">Xóa</button>`}</div>`).join('')+`<button class="btn p" data-a="psave">＋ Lưu cấu hình hiện tại</button>`;
 }
