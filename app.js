@@ -243,7 +243,7 @@ if(P.length||el<2500)cfRaf=requestAnimationFrame(f);else x.clearRect(0,0,W,H);
 function finish(){
 running=false;logSess(true);clearSess();lock(false);wake(false);
 [523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.18),i*180));setTimeout(()=>beep(1047,.6),540);
-say('Hoàn thành buổi tập. Tuyệt vời');
+say('Chúc mừng bạn đã hoàn thành buổi tập');
 try{navigator.vibrate&&navigator.vibrate([200,100,200,100,400])}catch(e){}
 const S=getSets();
 $('dStats').innerHTML=`<div><b>${fmt(totalAll)}</b><span>Thời gian</span></div><div><b>${cfg.ex}</b><span>Bài tập</span></div><div><b>${S.length}</b><span>Hiệp mỗi bài</span></div>`;
