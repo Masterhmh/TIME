@@ -240,6 +240,7 @@ x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p
 if(P.length||el<2500)cfRaf=requestAnimationFrame(f);else x.clearRect(0,0,W,H);
 })(t0);
 }
+let bkpT=0;
 function finish(){
 running=false;logSess(true);clearSess();lock(false);wake(false);
 [523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.18),i*180));setTimeout(()=>beep(1047,.6),540);
@@ -248,9 +249,10 @@ try{navigator.vibrate&&navigator.vibrate([200,100,200,100,400])}catch(e){}
 const S=getSets();
 $('dStats').innerHTML=`<div><b>${fmt(totalAll)}</b><span>Thời gian</span></div><div><b>${cfg.ex}</b><span>Bài tập</span></div><div><b>${S.length}</b><span>Hiệp mỗi bài</span></div>`;
 $('done').style.display='flex';confetti();
+clearTimeout(bkpT);bkpT=setTimeout(()=>{$('bkp').style.display='flex'},3000);
 }
-$('dDone').onclick=()=>{cancelAnimationFrame(cfRaf);$('done').style.display='none';close()};
-$('dShare').onclick=()=>shareBackup();
+$('dDone').onclick=()=>{cancelAnimationFrame(cfRaf);clearTimeout(bkpT);$('bkp').style.display='none';$('done').style.display='none';close()};
+$('bkpYes').onclick=()=>{$('bkp').style.display='none';shareBackup()};$('bkpNo').onclick=()=>{$('bkp').style.display='none'};
 $('play').onclick=()=>{
 initAudio();
 steps=build();if(!steps.length)return;
