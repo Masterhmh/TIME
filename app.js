@@ -88,7 +88,7 @@ for(let r=1;r<=n;r++){
 st.push({t:'hold',d:cfg.hold,e,s:si+1,r,n,sd,label:'Giữ'});
 if(r<n&&cfg.rest>0)st.push({t:'rest',d:cfg.rest,e,s:si+1,r,n,sd,label:'Nghỉ'});
 }
-if(sd<sides&&cfg.sideRest>0)st.push({t:'side',d:cfg.sideRest,e,s:si+1,sd,label:'Đổi bên',say:`Xong bên trái. Nghỉ ${cfg.sideRest} giây, đổi sang bên phải`});
+if(sd<sides&&cfg.sideRest>0)st.push({t:'side',d:cfg.sideRest,e,s:si+1,sd,label:'Đổi bên',say:`Xong bên trái. Nghỉ, đổi sang bên phải`});
 }
 if(si<S.length-1&&cfg.setRest>0)st.push({t:'setrest',d:cfg.setRest,e,s:si+1,label:'Nghỉ giữa hiệp',say:`Xong hiệp ${si+1}. Nghỉ ${cfg.setRest} giây. Hiệp tiếp theo ${S[si+1]} cái${cfg.swap?' mỗi bên, bắt đầu bên trái':''}`});
 });
