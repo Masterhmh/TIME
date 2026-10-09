@@ -258,8 +258,7 @@ if(idx+1>=steps.length)finish();else enter(idx+1);
 };
 $('rPrev').onclick=()=>{const s=steps[idx];last=performance.now();if(idx===0||s.d-rem>2)enter(idx);else{doneTime-=steps[idx-1].d;enter(idx-1)}};
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&started&&running)wake(true)});
-let hT=0;
-function lock(on){const l=$('lk'),h=$('lkHint');l.style.display=on?'block':'none';clearTimeout(hT);h.classList.remove('show');if(on){void h.offsetWidth;h.classList.add('show');hT=setTimeout(()=>h.classList.remove('show'),3000)}}
+function lock(on){const l=$('lk'),h=$('lkHint');l.style.display=on?'block':'none';h.classList.remove('show');if(on){void h.offsetWidth;h.classList.add('show')}}
 $('lockBtn').onclick=()=>lock(true);
 $('lkHold').addEventListener('click',()=>{lock(false);try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}});
 $('lk').addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
