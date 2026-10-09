@@ -303,7 +303,7 @@ if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)$('m
 const on=$('mt').querySelector('.on');if(on)$('mt').scrollLeft=on.offsetLeft-($('mt').clientWidth-on.offsetWidth)/2;
 $('mb').scrollTop=0;
 }
-const vAbout=()=>`<p><b>Đồng hồ bấm giờ</b> (phiên bản 2.0) là ứng dụng bấm giờ tập luyện <b>McGill Big 3</b> (Curl-Up, Side Plank, Bird-Dog): chỉnh thời gian giữ, nghỉ, số bài, số hiệp và theo dõi quá trình tập mỗi ngày.</p><div class="it"><small>Tác giả</small><b>Hoàng Hùng</b></div><div class="it"><small>SĐT</small><a href="tel:0964843943">0964843943</a></div><div class="it"><small>Facebook</small><a href="https://fb.com/masterhmh" target="_blank" rel="noopener">fb.com/masterhmh</a></div>`;
+const vAbout=()=>`<p><b>Đồng hồ bấm giờ</b> (phiên bản 2.0) là ứng dụng bấm giờ tập luyện <b>McGill Big 3</b> (Curl-Up, Side Plank, Bird-Dog): chỉnh thời gian giữ, nghỉ, số bài, số hiệp và theo dõi quá trình tập mỗi ngày.</p><div class="it"><small>Tác giả</small><b>Hoàng Hùng</b></div><div class="it"><small>Số điện thoại liên hệ</small><a href="tel:0964843943">0964843943</a></div><div class="it"><small>Facebook</small><a href="https://fb.com/masterhmh" target="_blank" rel="noopener">fb.com/masterhmh</a></div>`;
 const KT='0;.12;.3;.72;.88;1',KS=Array(5).fill('.4 0 .2 1').join(';');
 const anv=(a,v,t)=>`<animate${t?'Transform':''} attributeName="${a}"${t?` type="${t}"`:''} dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="${KT}" keySplines="${KS}" values="${v.join(';')}"/>`;
 const an=(a,r,h,t)=>anv(a,[r,r,h,h,r,r],t);
