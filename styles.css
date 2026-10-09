@@ -74,7 +74,12 @@ position:relative;animation:dpop .7s cubic-bezier(.2,1.6,.4,1) .15s both}
 #dStats b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
 #dStats span{font-size:13px;opacity:.9}
 #dDone{border:0;border-radius:30px;background:#fff;color:#0ea5e9;font-size:18px;font-weight:700;padding:16px 56px;cursor:pointer;animation:dup .6s ease 1.1s both;position:relative}
-#dShare{margin-top:14px;border:2px solid rgba(255,255,255,.75);border-radius:30px;background:transparent;color:#fff;font-size:15px;font-weight:600;padding:12px 34px;cursor:pointer;animation:dup .6s ease 1.3s both}
+#bkp{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:24px}
+.bkp-box{background:var(--bg);color:var(--tx);border-radius:22px;padding:26px 22px;max-width:340px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35);animation:up .25s ease-out}
+.bkp-box p{font-size:16px;line-height:1.45;margin:0 0 20px}
+.bkp-btns{display:flex;gap:10px}
+#bkpYes{flex:1;border:0;border-radius:16px;background:#0ea5e9;color:#fff;font-size:16px;font-weight:700;padding:13px 0;cursor:pointer}
+#bkpNo{flex:1;border:1px solid var(--bd);border-radius:16px;background:var(--chip);color:var(--tx);font-size:16px;font-weight:600;padding:13px 0;cursor:pointer}
 @keyframes dfade{from{opacity:0}to{opacity:1}}
 @keyframes dpop{from{transform:scale(0)}to{transform:scale(1)}}
 @keyframes dcheck{to{stroke-dashoffset:0}}
