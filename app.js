@@ -250,6 +250,7 @@ $('dStats').innerHTML=`<div><b>${fmt(totalAll)}</b><span>Thời gian</span></div
 $('done').style.display='flex';confetti();
 }
 $('dDone').onclick=()=>{cancelAnimationFrame(cfRaf);$('done').style.display='none';close()};
+$('dShare').onclick=()=>shareBackup();
 $('play').onclick=()=>{
 initAudio();
 steps=build();if(!steps.length)return;
@@ -272,7 +273,7 @@ function lock(on){const l=$('lk'),h=$('lkHint');l.style.display=on?'block':'none
 $('lockBtn').onclick=()=>lock(true);
 $('lkHold').addEventListener('click',()=>{lock(false);try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}});
 $('lk').addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
-$('sug').onclick=e=>{const a=e.target.dataset.s;if(!a)return;if(a==='backup'){doExport();return}const g=suggest();if(!g)return;
+$('sug').onclick=e=>{const a=e.target.dataset.s;if(!a)return;if(a==='backup'){shareBackup();return}const g=suggest();if(!g)return;
 if(a==='ok'){cfg.hold=g.to;save();render()}else{try{localStorage.setItem('sugOff',String(Date.now()+7*864e5))}catch(x){}sugRender()}};
 /* Popup & menu */
 const mk=(first,dec,nSets,swap=1)=>({prep:5,hold:10,rest:3,ex:3,nSets,first,dec,setRest:15,switchRest:30,swap,sideRest:10,names:[...BIG3]});
@@ -417,7 +418,13 @@ const del=`<button class="btn" data-a="clr" data-s="${hv}">${I('trash')} Xóa ${
 return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">${I('down')} Xuất sao lưu</button><button class="btn" data-a="imp">${I('up')} Nhập sao lưu</button><button class="btn" data-a="csv">${I('down')} Xuất CSV</button><br>${del}<p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
 }
 const syncYM=()=>{hy=+hdk.slice(0,4);hm=+hdk.slice(5,7)-1};
-function doExport(){const u=URL.createObjectURL(new Blob([JSON.stringify({v:1,cfg,hist:get('hist'),pre:get('pre')})],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download='time-backup-'+dk(Date.now())+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);try{localStorage.setItem('lastBackup',String(Date.now()))}catch(e){}sugRender()}
+const backupName=()=>{const d=new Date();return d.getDate()+'-'+(d.getMonth()+1)+'-'+d.getFullYear()+'.json'};
+function shareBackup(){const blob=new Blob([JSON.stringify({v:1,cfg,hist:get('hist'),pre:get('pre')})],{type:'application/json'});
+const f=new File([blob],backupName(),{type:'application/json'});
+const done=()=>{try{localStorage.setItem('lastBackup',String(Date.now()))}catch(e){}sugRender()};
+if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Sao lưu buổi tập'}).then(done).catch(()=>{})}
+else doExport()}
+function doExport(){const u=URL.createObjectURL(new Blob([JSON.stringify({v:1,cfg,hist:get('hist'),pre:get('pre')})],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download=backupName();document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);try{localStorage.setItem('lastBackup',String(Date.now()))}catch(e){}sugRender()}
 $('ov').addEventListener('click',e=>{
 if(e.target===$('ov')){closeOv();return}
 const b=e.target.closest('[data-a]');if(!b)return;
