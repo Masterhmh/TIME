@@ -123,10 +123,17 @@ const cur=wk0(new Date());let k=(cnt[cur]||0)>=need?cur:addD(cur,-7);
 for(let i=0;i<3;i++,k=addD(k,-7))if((cnt[k]||0)<need)return null;
 return{to:Math.min(30,cfg.hold+2),need};
 }
+function backupCard(){
+const h=get('hist');if(!h.length)return '';
+let lb=0;try{lb=+localStorage.getItem('lastBackup')||0}catch(e){}
+const dn=Math.floor((Date.now()-lb)/864e5);
+if(lb&&dn<7)return '';
+return `<div class="sug"><b>${I('down')} Nhắc sao lưu</b>${lb?('Đã '+dn+' ngày chưa sao lưu lịch sử tập.'):'Bạn chưa sao lưu lịch sử tập lần nào.'} Dữ liệu chỉ lưu trên máy này.<div><button class="btn p" data-s="backup">Xuất sao lưu ngay</button></div></div>`;
+}
 function sugRender(){
-const g=suggest(),e=$('sug');
-if(!g||started){e.innerHTML='';return}
-e.innerHTML=`<div class="sug"><b>${I('bulb')} Gợi ý tăng dần</b>Bạn đã tập đều 3 tuần liên tiếp (từ ${g.need} buổi/tuần) ở mức giữ ${cfg.hold} giây. Có thể thử tăng lên ${g.to} giây. Nếu thấy đau hoặc mỏi bất thường thì giữ nguyên và hỏi chuyên gia.<div><button class="btn p" data-s="ok">Tăng lên ${g.to} giây</button><button class="btn" data-s="later">Để sau 1 tuần</button></div></div>`;
+const e=$('sug'),g=suggest();
+if(started){e.innerHTML='';return}
+e.innerHTML=backupCard()+(!g?'':`<div class="sug"><b>${I('bulb')} Gợi ý tăng dần</b>Bạn đã tập đều 3 tuần liên tiếp (từ ${g.need} buổi/tuần) ở mức giữ ${cfg.hold} giây. Có thể thử tăng lên ${g.to} giây. Nếu thấy đau hoặc mỏi bất thường thì giữ nguyên và hỏi chuyên gia.<div><button class="btn p" data-s="ok">Tăng lên ${g.to} giây</button><button class="btn" data-s="later">Để sau 1 tuần</button></div></div>`);
 }
 /* Âm thanh */
 let ac=null;
@@ -265,7 +272,7 @@ function lock(on){const l=$('lk'),h=$('lkHint');l.style.display=on?'block':'none
 $('lockBtn').onclick=()=>lock(true);
 $('lkHold').addEventListener('click',()=>{lock(false);try{navigator.vibrate&&navigator.vibrate(30)}catch(x){}});
 $('lk').addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
-$('sug').onclick=e=>{const a=e.target.dataset.s,g=suggest();if(!a||!g)return;
+$('sug').onclick=e=>{const a=e.target.dataset.s;if(!a)return;if(a==='backup'){doExport();return}const g=suggest();if(!g)return;
 if(a==='ok'){cfg.hold=g.to;save();render()}else{try{localStorage.setItem('sugOff',String(Date.now()+7*864e5))}catch(x){}sugRender()}};
 /* Popup & menu */
 const mk=(first,dec,nSets,swap=1)=>({prep:5,hold:10,rest:3,ex:3,nSets,first,dec,setRest:15,switchRest:30,swap,sideRest:10,names:[...BIG3]});
@@ -280,6 +287,10 @@ const PR=[
 const PK=['prep','hold','rest','ex','nSets','first','dec','setRest','switchRest','swap','sideRest'];
 const allP=()=>[...PR.map(p=>({...p,b:1})),...get('pre')];
 let mt='about',hv='day',hdk=dk(Date.now()),hy=0,hm=0,hwk=wk0(new Date());
+let dEv=null;const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent),isSA=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dEv=e;try{if(mt==='about')mrender()}catch(x){}});
+addEventListener('appinstalled',()=>{dEv=null;try{if(mt==='about')mrender()}catch(x){}});
+const vInstall=()=>{if(isSA)return '';if(dEv)return `<div class="it"><b>Cài đặt ứng dụng</b><small>Thêm vào màn hình chính để mở nhanh và dùng khi không có mạng</small><button class="btn p" data-a="install">Cài đặt ngay</button></div>`;if(isIOS)return `<div class="it"><b>Cài đặt ứng dụng</b><small>iPhone: bấm nút Chia sẻ ở thanh Safari rồi chọn “Thêm vào MH chính”</small></div>`;return ''};
 let isWel=false;
 const openOv=()=>{$('ov').style.display='flex';document.documentElement.classList.add('lock')};
 const closeOv=()=>{
@@ -303,7 +314,7 @@ if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)$('m
 const on=$('mt').querySelector('.on');if(on)$('mt').scrollLeft=on.offsetLeft-($('mt').clientWidth-on.offsetWidth)/2;
 $('mb').scrollTop=0;
 }
-const vAbout=()=>`<p><b>Đồng hồ bấm giờ</b> (phiên bản 2.0) là ứng dụng bấm giờ tập luyện <b>McGill Big 3</b> (Curl-Up, Side Plank, Bird-Dog): chỉnh thời gian giữ, nghỉ, số bài, số hiệp và theo dõi quá trình tập mỗi ngày.</p><div class="it"><small>Tác giả</small><b>Hoàng Hùng</b></div><div class="it"><small>Số điện thoại liên hệ</small><a href="tel:0964843943">0964843943</a></div><div class="it"><small>Facebook</small><a href="https://fb.com/masterhmh" target="_blank" rel="noopener">fb.com/masterhmh</a></div>`;
+const vAbout=()=>`<p><b>Đồng hồ bấm giờ</b> (phiên bản 2.0) là ứng dụng bấm giờ tập luyện <b>McGill Big 3</b> (Curl-Up, Side Plank, Bird-Dog): chỉnh thời gian giữ, nghỉ, số bài, số hiệp và theo dõi quá trình tập mỗi ngày.</p><div class="it"><small>Tác giả</small><b>Hoàng Hùng</b></div><div class="it"><small>Số điện thoại liên hệ</small><a href="tel:0964843943">0964843943</a></div><div class="it"><small>Facebook</small><a href="https://fb.com/masterhmh" target="_blank" rel="noopener">fb.com/masterhmh</a></div>${vInstall()}`;
 const KT='0;.12;.3;.72;.88;1',KS=Array(5).fill('.4 0 .2 1').join(';');
 const anv=(a,v,t)=>`<animate${t?'Transform':''} attributeName="${a}"${t?` type="${t}"`:''} dur="5s" repeatCount="indefinite" calcMode="spline" keyTimes="${KT}" keySplines="${KS}" values="${v.join(';')}"/>`;
 const an=(a,r,h,t)=>anv(a,[r,r,h,h,r,r],t);
@@ -373,9 +384,10 @@ return `<div class="it"><b>${x.s0?hhmm(x.s0)+'–':''}${hhmm(x.t)}</b> ${x.ok?'<
 (!x.ok&&sp&&sp.e?`<small>Dừng ở: ${nl?esc(nl[sp.e-1]||''):'bài '+sp.e}${sp.s?', hiệp '+sp.s:''}${sp.r?', cái '+sp.r:''}${x.sw&&sp.sd?(sp.sd===1?', bên trái':', bên phải'):''}</small>`:'')+`<button class="btn" data-a="sdel" data-t="${x.t}">${I('trash')} Xóa buổi này</button></div>`};
 function vHist(){
 const h=get('hist'),days={};h.forEach(x=>{const k=dk(x.t);days[k]=(days[k]||0)+x.el});
-let s=0,d=new Date();if(!days[dk(d)])d.setDate(d.getDate()-1);
-while(days[dk(d)]){s++;d.setDate(d.getDate()-1)}
-const keys=Object.keys(days).sort();let lg=0,run=0,pv=null;
+const dd={};h.forEach(x=>{if(x.ok)dd[dk(x.t)]=1});
+let s=0,d=new Date();if(!dd[dk(d)])d.setDate(d.getDate()-1);
+while(dd[dk(d)]){s++;d.setDate(d.getDate()-1)}
+const keys=Object.keys(dd).sort();let lg=0,run=0,pv=null;
 keys.forEach(k=>{const q=k.split('-'),n=Date.UTC(+q[0],+q[1]-1,+q[2])/864e5;run=pv!==null&&n-pv===1?run+1:1;pv=n;lg=Math.max(lg,run)});
 const inM=(x,p)=>dk(x.t).startsWith(p),sum=l=>l.reduce((a,x)=>a+x.el,0);
 const best=h.reduce((a,x)=>Math.max(a,x.h?x.hd:0),0);
@@ -405,12 +417,14 @@ const del=`<button class="btn" data-a="clr" data-s="${hv}">${I('trash')} Xóa ${
 return o+`<hr style="border:0;border-top:1px solid var(--bd)"><button class="btn" data-a="exp">${I('down')} Xuất sao lưu</button><button class="btn" data-a="imp">${I('up')} Nhập sao lưu</button><button class="btn" data-a="csv">${I('down')} Xuất CSV</button><br>${del}<p style="color:var(--mu);font-size:13px">Dữ liệu lưu trên thiết bị này. Hãy xuất tệp sao lưu định kỳ để không mất khi xóa dữ liệu trình duyệt.</p>`;
 }
 const syncYM=()=>{hy=+hdk.slice(0,4);hm=+hdk.slice(5,7)-1};
+function doExport(){const u=URL.createObjectURL(new Blob([JSON.stringify({v:1,cfg,hist:get('hist'),pre:get('pre')})],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download='time-backup-'+dk(Date.now())+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);try{localStorage.setItem('lastBackup',String(Date.now()))}catch(e){}sugRender()}
 $('ov').addEventListener('click',e=>{
 if(e.target===$('ov')){closeOv();return}
 const b=e.target.closest('[data-a]');if(!b)return;
 const a=b.dataset.a,D=b.dataset;
 if(a==='close')closeOv();
 else if(a==='tab'){mt=D.t;if(mt==='hist'){hdk=dk(Date.now());hwk=wk0(new Date());syncYM()}mrender()}
+else if(a==='install'){if(dEv){dEv.prompt();dEv=null;mrender()}}
 else if(a==='hv'){hv=D.v;syncYM();if(hv==='week')hwk=wk0(new Date(hdk+'T00:00'));mrender()}
 else if(a==='nav'){const n=+D.n;
 if(hv==='day'){const d=new Date(hdk+'T00:00');d.setDate(d.getDate()+n);hdk=dk(d);syncYM()}
@@ -429,7 +443,7 @@ else if(a==='sdel'){if(confirm('Xóa buổi tập này? Không thể hoàn tác.
 else if(a==='csv'){const q=v=>'"'+String(v).replace(/"/g,'""')+'"',h=get('hist');
 const R=[['Ngày','Bắt đầu','Kết thúc','Trạng thái','Số cái','Giây/cái','Thời gian tập (s)','Bài','Hiệp','Đổi bên','Chi tiết bài'],...h.map(x=>[dk(x.t),x.s0?hhmm(x.s0):'',hhmm(x.t),x.ok?'Hoàn thành':'Bỏ dở',x.h,x.hd,x.el,x.ex,x.ns,x.sw?'Có':'Không',x.nl&&x.pe?x.nl.map((n,i)=>n+' '+x.pe[i]).join('; '):(x.nm||'')])];
 const u=URL.createObjectURL(new Blob(['\ufeff'+R.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'})),l=document.createElement('a');l.href=u;l.download='lich-su-'+dk(Date.now())+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
-else if(a==='exp'){const u=URL.createObjectURL(new Blob([JSON.stringify({v:1,cfg,hist:get('hist'),pre:get('pre')})],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download='time-backup-'+dk(Date.now())+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+else if(a==='exp')doExport();
 else if(a==='imp')$('file').click();
 else if(a==='clr'){
 const sc=D.s,h=get('hist');
@@ -451,7 +465,7 @@ const d=JSON.parse(r.result);if(!d||typeof d!=='object')throw 0;
 if(Array.isArray(d.hist)){const m=new Map(get('hist').map(x=>[x.t,x]));d.hist.forEach(x=>{if(x&&x.t)m.set(x.t,x)});put('hist',[...m.values()].sort((a,b)=>a.t-b.t))}
 if(Array.isArray(d.pre))put('pre',d.pre);
 if(d.cfg&&typeof d.cfg==='object'){Object.assign(cfg,d.cfg);save()}
-render();mrender();alert('Đã nhập dữ liệu sao lưu.');
+try{localStorage.setItem('lastBackup',String(Date.now()))}catch(e){}render();mrender();alert('Đã nhập dữ liệu sao lưu.');
 }catch(x){alert('Tệp sao lưu không hợp lệ.')}};
 r.readAsText(f);
 };
